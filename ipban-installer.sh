@@ -13,15 +13,13 @@ uninstall_ipban(){
 	iptables -F && iptables -X && iptables -Z && ip6tables -F && ip6tables -X && ip6tables -Z 
 	iptables-save > /etc/iptables/rules.v4 && ip6tables-save > /etc/iptables/rules.v6
 	systemctl restart iptables.service ip6tables.service
-	clear && success "Uninstalled IPBAN!"
-	exit 0
+	clear && success "Uninstalled IPBAN!" && exit 0
 }
 
 update_ipban(){
 	wget -P ${HOME} -N --no-check-certificate "https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-update.sh"
 	chmod +x "${HOME}/ipban-update.sh" && bash "${HOME}/ipban-update.sh"
-	clear && success "Updated IPBAN!"
-	exit 0
+	clear && success "Updated IPBAN!" && exit 0
 }
 
 install_ipban(){
@@ -47,8 +45,7 @@ install_ipban(){
 	iptables-save > /etc/iptables/rules.v4 && ip6tables-save > /etc/iptables/rules.v6
 
 	systemctl enable netfilter-persistent.service && systemctl restart iptables.service ip6tables.service
-	clear && success "Installed IPBAN!"
-	exit 0
+	clear && success "Installed IPBAN!" && exit 0
 }
 
 #######get params#########
