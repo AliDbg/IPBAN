@@ -1,24 +1,10 @@
 #!/bin/bash
 
-#######get params#########
-while [[ $# > 0 ]];do
-    key="$1"
-    case $key in
-	install)
-		install_ipban
-		;;
-	update)
-		update_ipban
-		;;
-	remove)
-		uninstall_ipban
-		;;
-        *)
-         # unknown option
-        ;;
-    esac
-    shift
-done
+success() {
+	Green="\033[32m"
+	Font="\033[0m"
+	echo -e "${Green}[+]${Font} $*"
+}
 
 uninstall_ipban(){
 	rm "${HOME}/ipban-update.sh"
@@ -64,3 +50,23 @@ install_ipban(){
 	clear && success "Installed IPBAN!"
 	exit 0
 }
+
+#######get params#########
+while [[ $# > 0 ]];do
+    key="$1"
+    case $key in
+	install)
+		install_ipban
+		;;
+	update)
+		update_ipban
+		;;
+	remove)
+		uninstall_ipban
+		;;
+        *)
+         # unknown option
+        ;;
+    esac
+    shift
+done
