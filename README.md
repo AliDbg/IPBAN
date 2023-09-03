@@ -11,11 +11,17 @@
 
 **Install**
 ```
-bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-installer.sh 2> /dev/null)
+source <(curl -sL https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-installer.sh) --install
 ```
 
-**Uninstall**
+**Update**
 ```
-bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-uninstall.sh 2> /dev/null)
+source <(curl -sL https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-installer.sh) --update
 ```
+
+**Remove**
+```
+source <(curl -sL https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-installer.sh) --remove
+```
+
 [![Stargazers over time](https://starchart.cc/AliDbg/IPBAN.svg)](https://starchart.cc/AliDbg/IPBAN)
