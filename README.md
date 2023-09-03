@@ -6,6 +6,8 @@
 - Support Multi Country
 - Support Multi Port
 - Persistent settings after reboot
+- Automatic IP update every 2 days
 - Tested on Ubuntu version 22
-- 
+
+  
 [![Stargazers over time](https://starchart.cc/AliDbg/IPBAN.svg)](https://starchart.cc/AliDbg/IPBAN)
