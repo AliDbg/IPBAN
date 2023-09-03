@@ -16,12 +16,6 @@ uninstall_ipban(){
 	clear && success "Uninstalled IPBAN!" && exit 0
 }
 
-update_ipban(){
-	wget -P ${HOME} -N --no-check-certificate "https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-update.sh"
-	chmod +x "${HOME}/ipban-update.sh" && bash "${HOME}/ipban-update.sh"
-	clear && success "Updated IPBAN!" && exit 0
-}
-
 install_ipban(){
 	apt update && apt -y upgrade
 
@@ -54,9 +48,6 @@ while [[ $# > 0 ]];do
     case $key in
 	install)
 		install_ipban
-		;;
-	update)
-		update_ipban
 		;;
 	remove)
 		uninstall_ipban
