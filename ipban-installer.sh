@@ -27,6 +27,7 @@ install_ipban(){
 
 	mkdir /usr/share/xt_geoip/ && chmod +x /usr/share/xt_geoip/
 
+	rm "${HOME}/ipban-update.sh"
 	wget -P ${HOME} -N --no-check-certificate "https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-update.sh"
 
 	crontab -l | grep -v "ipban-update.sh" | crontab -
