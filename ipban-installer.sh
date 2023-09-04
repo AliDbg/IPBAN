@@ -46,7 +46,7 @@ install_ipban(){
 	clear && success "Installed IPBAN!" && exit 0
 }
 
-resetIPtables(){
+resetRule(){
 	iptables -F && iptables -X && iptables -Z && ip6tables -F && ip6tables -X && ip6tables -Z 
 	iptables-save > /etc/iptables/rules.v4 && ip6tables-save > /etc/iptables/rules.v6
 	systemctl restart iptables.service ip6tables.service
@@ -56,6 +56,9 @@ resetIPtables(){
 while [[ $# > 0 ]];do
     key="$1"
     case $key in
+	resetiptables)
+		resetRule
+		;;
 	install)
 		install_ipban
 		;;
