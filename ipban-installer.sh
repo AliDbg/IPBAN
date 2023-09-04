@@ -4,33 +4,41 @@ IO="OUTPUT"
 GEOIP="CN,IR,CU,VN,ZW,BY"
 LIMIT="DROP"
 
-while [[ $# > 0 ]];do
-    key="$1"
-    case $key in
+err() {
+	Red="\033[1;31m"
+	Font="\033[0m"
+	echo -e "${Red}[+]${Font} $*"
+}
+
+success() {
+	Green="\033[1;32m"
+	Font="\033[0m"
+	echo -e "${Green}[+]${Font} $*"
+}
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
 	'--geoip')
-		if [[ -z "$2" ]]; then
-          echo "error: Enter GEOIP"
-          exit 1
-        fi
-		GEOIP="$2"
-		shift
-		;;
+		[[ -z $2 ]] && {
+                err "$1 : Enter GEOIP"
+        }
+			GEOIP="$2"
+	shift
+	;;
 	'--io')
-		if [[ -z "$2" ]]; then
-          echo "error: Enter INPUT or OUTPUT!?"
-          exit 1
-        fi
-		IO="$2"
-		shift
-		;;
+		[[ -z $2 ]] && {
+                err "$1 : Enter INPUT or OUTPUT!?"
+        }
+			IO="$2"
+	shift
+	;;
 	'--limit')
-		if [[ -z "$2" ]]; then
-          echo "error: Enter DROP or ACCEPT!?"
-          exit 1
-        fi
-		LIMIT="$2"
-		shift
-		;;
+		[[ -z $2 ]] && {
+                err "$1 : Enter DROP or ACCEPT!?"
+        }
+			LIMIT="$2"
+	shift
+	;;
         *)
          # unknown option
         ;;
@@ -38,11 +46,6 @@ while [[ $# > 0 ]];do
     shift
 done
 
-success() {
-	Green="\033[32m"
-	Font="\033[0m"
-	echo -e "${Green}[+]${Font} $*"
-}
 
 uninstall_ipban(){
 	rm "${HOME}/ipban-update.sh"
@@ -62,7 +65,7 @@ install_ipban(){
 	mkdir /usr/share/xt_geoip/ && chmod +x /usr/share/xt_geoip/
 
 	rm "${HOME}/ipban-update.sh"
-	wget -P ${HOME} -N --no-check-certificate "https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-update.sh"
+	wget -P "${HOME}" -N --no-check-certificate "https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-update.sh"
 
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "0 3 */2 * * ${HOME}/ipban-update.sh") | crontab -
@@ -70,10 +73,10 @@ install_ipban(){
 
 	iptables -F && iptables -X && iptables -Z && ip6tables -F && ip6tables -X && ip6tables -Z 
 
-	iptables -A ${IO} -m geoip -p tcp  -m multiport --dports 0:9999 --dst-cc ${GEOIP} -j ${LIMIT}
-	ip6tables -A ${IO} -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc ${GEOIP} -j ${LIMIT}
-	iptables -A ${IO} -m geoip -p udp  -m multiport --dports 0:9999 --dst-cc ${GEOIP} -j ${LIMIT}
-	ip6tables -A ${IO} -m geoip -p udp -m multiport --dports 0:9999 --dst-cc ${GEOIP} -j ${LIMIT}
+	iptables -A "${IO}" -m geoip -p tcp  -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
+	ip6tables -A "${IO}" -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
+	iptables -A "${IO}" -m geoip -p udp  -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
+	ip6tables -A "${IO}" -m geoip -p udp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
 
 	iptables-save > /etc/iptables/rules.v4 && ip6tables-save > /etc/iptables/rules.v6
 
@@ -88,9 +91,8 @@ resetRule(){
 	clear && success "Resetted IPTABLES!" && exit 0
 }
 #######get params#########
-while [[ $# > 0 ]];do
-    key="$1"
-    case $key in
+while [[ $# -gt 0 ]]; do
+    case $1 in
 	resetiptables)
 		resetRule
 		;;
