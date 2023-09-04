@@ -1,5 +1,9 @@
 #!/bin/bash
 
+IO="OUTPUT"
+GEOIP="CN,IR,CU,VN,ZW,BY"
+LIMIT="DROP"
+
 success() {
 	Green="\033[32m"
 	Font="\033[0m"
@@ -31,10 +35,10 @@ install_ipban(){
 
 	iptables -F && iptables -X && iptables -Z && ip6tables -F && ip6tables -X && ip6tables -Z 
 
-	iptables -A OUTPUT -m geoip -p tcp  -m multiport --dports 0:9999 --dst-cc CN,IR,CU,VN,ZW,BY -j DROP
-	ip6tables -A OUTPUT -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc CN,IR,CU,VN,ZW,BY -j DROP
-	iptables -A OUTPUT -m geoip -p udp  -m multiport --dports 0:9999 --dst-cc CN,IR,CU,VN,ZW,BY -j DROP
-	ip6tables -A OUTPUT -m geoip -p udp -m multiport --dports 0:9999 --dst-cc CN,IR,CU,VN,ZW,BY -j DROP
+	iptables -A ${IO} -m geoip -p tcp  -m multiport --dports 0:9999 --dst-cc ${GEOIP} -j ${LIMIT}
+	ip6tables -A ${IO} -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc ${GEOIP} -j ${LIMIT}
+	iptables -A ${IO} -m geoip -p udp  -m multiport --dports 0:9999 --dst-cc ${GEOIP} -j ${LIMIT}
+	ip6tables -A ${IO} -m geoip -p udp -m multiport --dports 0:9999 --dst-cc ${GEOIP} -j ${LIMIT}
 
 	iptables-save > /etc/iptables/rules.v4 && ip6tables-save > /etc/iptables/rules.v6
 
@@ -42,15 +46,49 @@ install_ipban(){
 	clear && success "Installed IPBAN!" && exit 0
 }
 
+function resetIPtables(){
+	iptables -F && iptables -X && iptables -Z && ip6tables -F && ip6tables -X && ip6tables -Z 
+	iptables-save > /etc/iptables/rules.v4 && ip6tables-save > /etc/iptables/rules.v6
+	systemctl restart iptables.service ip6tables.service
+	clear && success "Resetted IPTABLES!" && exit 0
+}
 #######get params#########
 while [[ $# > 0 ]];do
     key="$1"
     case $key in
+	)
+	resetIPtables)
+		resetIPtables
+		;;
 	install)
 		install_ipban
 		;;
 	remove)
 		uninstall_ipban
+		;;
+	'--geoip')
+		if [[ -z "$2" ]]; then
+          echo "error: Enter GEOIP"
+          exit 1
+        fi
+		GEOIP="$2"
+		shift
+		;;
+	'--io')
+		if [[ -z "$2" ]]; then
+          echo "error: Enter INPUT or OUTPUT!?"
+          exit 1
+        fi
+		IO="$2"
+		shift
+		;;
+	'--limit')
+		if [[ -z "$2" ]]; then
+          echo "error: Enter DROP or ACCEPT!?"
+          exit 1
+        fi
+		LIMIT="$2"
+		shift
 		;;
         *)
          # unknown option
