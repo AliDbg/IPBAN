@@ -56,7 +56,7 @@ function resetIPtables(){
 while [[ $# > 0 ]];do
     key="$1"
     case $key in
-	resetIPtables)
+		resetIPtables)
 		resetIPtables
 		;;
 	install)
