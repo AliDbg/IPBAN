@@ -4,6 +4,40 @@ IO="OUTPUT"
 GEOIP="CN,IR,CU,VN,ZW,BY"
 LIMIT="DROP"
 
+while [[ $# > 0 ]];do
+    key="$1"
+    case $key in
+	'--geoip')
+		if [[ -z "$2" ]]; then
+          echo "error: Enter GEOIP"
+          exit 1
+        fi
+		GEOIP="$2"
+		shift
+		;;
+	'--io')
+		if [[ -z "$2" ]]; then
+          echo "error: Enter INPUT or OUTPUT!?"
+          exit 1
+        fi
+		IO="$2"
+		shift
+		;;
+	'--limit')
+		if [[ -z "$2" ]]; then
+          echo "error: Enter DROP or ACCEPT!?"
+          exit 1
+        fi
+		LIMIT="$2"
+		shift
+		;;
+        *)
+         # unknown option
+        ;;
+    esac
+    shift
+done
+
 success() {
 	Green="\033[32m"
 	Font="\033[0m"
@@ -65,30 +99,6 @@ while [[ $# > 0 ]];do
 		;;
 	remove)
 		uninstall_ipban
-		;;
-	'--geoip')
-		if [[ -z "$2" ]]; then
-          echo "error: Enter GEOIP"
-          exit 1
-        fi
-		GEOIP="$2"
-		shift
-		;;
-	'--io')
-		if [[ -z "$2" ]]; then
-          echo "error: Enter INPUT or OUTPUT!?"
-          exit 1
-        fi
-		IO="$2"
-		shift
-		;;
-	'--limit')
-		if [[ -z "$2" ]]; then
-          echo "error: Enter DROP or ACCEPT!?"
-          exit 1
-        fi
-		LIMIT="$2"
-		shift
 		;;
         *)
          # unknown option
