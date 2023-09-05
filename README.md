@@ -29,7 +29,8 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-insta
 bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-installer.sh) -remove 1
 ```
 
-
+>**-io:** **INPUT** or **OUTPUT**
+>
 > **-limit:**  **Accept** (allow IPs) **DROP** (good to input, DoS protection, block, no answer, timeout) **REJECT** (block + no timeout for client)
 > 
 > **-geoip:** Country	Alpha-2 code
