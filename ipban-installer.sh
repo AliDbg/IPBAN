@@ -11,11 +11,11 @@ NOICMP=0
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    -noicmp) NOICMP="$2"; shift 2;;
     -add) ADD="$2"; shift 2;;
     -reset) RESET="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
     -install) INSTALL="$2"; shift 2;;
+	-noicmp) NOICMP="$2"; shift 2;;
     -geoip) GEOIP="$2"; shift 2;;
     -limit) LIMIT="$2"; shift 2;;
     -io) IO="$2"; shift 2;;
