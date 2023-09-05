@@ -28,6 +28,6 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-insta
 ```
 bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-installer.sh) -remove 1
 ```
-> **Note:**  ACCEPT (Allow to ip) DROP (Good for INPUT and DoS Protection with no answer and timeout) REJECT (no timeout for client)
+> **-io Note:**  ACCEPT (Allow to ip) DROP (Good for INPUT and DoS Protection with no answer and timeout) REJECT (no timeout for client)
 
 [![Stargazers over time](https://starchart.cc/AliDbg/IPBAN.svg)](https://starchart.cc/AliDbg/IPBAN)
