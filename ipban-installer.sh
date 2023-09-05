@@ -7,11 +7,11 @@ INSTALL=0
 RESET=0
 REMOVE=0
 ADD=0
-NOPING=0
+NOICMP=0
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    -noping) NOPING="$2"; shift 2;;
+    -noicmp) NOICMP="$2"; shift 2;;
     -add) ADD="$2"; shift 2;;
     -reset) RESET="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
@@ -71,9 +71,9 @@ iptables_rules(){
 	ip6tables -A "${IO}" -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
 	iptables -A "${IO}" -m geoip -p udp  -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
 	ip6tables -A "${IO}" -m geoip -p udp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
-	if [[ $NOPING == 1 ]]; then
-		ip6tables -A INPUT -p icmp -m icmp --icmp-type 8 -j DROP
-		iptables -A INPUT -p icmp -m icmp --icmp-type 8 -j DROP
+	if [[ $NOICMP == 1 ]]; then
+		/sbin/iptables -t mangle -A PREROUTING -p icmp -j DROP
+		/sbin/ip6tables -t mangle -A PREROUTING -p icmp -j DROP
 	fi
 }
 
