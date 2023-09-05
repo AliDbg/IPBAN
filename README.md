@@ -1,6 +1,6 @@
 # IPBAN
 
-- Limit server input/output to IP countries [REJECT=DROP, ACCEPT]
+- Limit server input/output to IP countries
 - Support TCP,UDP
 - Support IPv4, IPv6
 - Support Multi Port
