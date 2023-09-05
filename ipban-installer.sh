@@ -71,8 +71,8 @@ iptables_rules(){
 }
 
 install_ipban(){
-	apt -y update && apt -y upgrade && apt -y autoremove
-	apt -y install curl unzip perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent 
+	apt -y update && apt -y upgrade
+	apt -y install curl unzip perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent && apt -y autoremove
 	mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	create_update_sh
 	crontab -l | grep -v "ipban-update.sh" | crontab -
