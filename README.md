@@ -6,7 +6,7 @@
 - Support Multi-Port
 - Support Multi-Country
 - Remaining settings after reboot
-- Automatic IP update every 2 days
+- Automatic IP update every tow days
 - Support to Debian and Ubuntu (v22, tested)
 
 **Install**
