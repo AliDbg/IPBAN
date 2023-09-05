@@ -5,7 +5,7 @@
 - Support IPv4 and IPv6.
 - Support Multi-Port
 - Support Multi-Country
-- Remaining settings after reboot
+- Persistent settings after reboot
 - Automatic IP update every two days
 - Support for Debian and Ubuntu (v22, tested)
 
