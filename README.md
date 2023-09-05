@@ -1,4 +1,4 @@
-# IPBAN
+## IPBAN
 
 - Restrict server input and output to IP countries.
 - Support TCP and UDP.
