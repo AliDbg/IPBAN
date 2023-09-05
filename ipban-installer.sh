@@ -37,7 +37,7 @@ iptables_save_restart(){
 	systemctl restart iptables.service ip6tables.service
 }
 uninstall_ipban(){
-	rm "${HOME}/ipban-update.sh"
+	rm /usr/share/ipban/ -rf
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	systemctl stop netfilter-persistent.service && systemctl disable netfilter-persistent.service
 	iptables_reset_rules
@@ -46,7 +46,8 @@ uninstall_ipban(){
 }
 
 create_update_sh(){
-cat > "${HOME}/ipban-update.sh" << EOF
+mkdir -p /usr/share/ipban/ && chmod a+rwx /usr/share/ipban/
+cat > "/usr/share/ipban/ipban-update.sh" << EOF
 #!/bin/bash
 workdir=\$(mktemp -d)
 cd "\${workdir}"
@@ -60,7 +61,7 @@ iptables -m geoip -h && ip6tables -m geoip -h
 systemctl restart iptables.service ip6tables.service
 clear && echo "Updated IPBAN!" 
 EOF
-chmod +x "${HOME}/ipban-update.sh"
+chmod +x "/usr/share/ipban/ipban-update.sh"
 }
 
 iptables_rules(){
@@ -76,8 +77,8 @@ install_ipban(){
 	mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	create_update_sh
 	crontab -l | grep -v "ipban-update.sh" | crontab -
-	(crontab -l 2>/dev/null; echo "0 3 */2 * * ${HOME}/ipban-update.sh") | crontab -
-	bash "${HOME}/ipban-update.sh"
+	(crontab -l 2>/dev/null; echo "0 3 */2 * * /usr/share/ipban/ipban-update.sh") | crontab -
+	bash "/usr/share/ipban/ipban-update.sh"
 	iptables_reset_rules
 	iptables_rules
 	systemctl enable netfilter-persistent.service && iptables_save_restart
