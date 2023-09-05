@@ -76,9 +76,9 @@ iptables_rules(){
 install_ipban(){
 	apt -y update && apt -y upgrade && apt -y autoremove
 	apt -y install curl unzip perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent 
-	xt_geoip_dir=/usr/share/xt_geoip/
+	xt_geoip_dir="/usr/share/xt_geoip/"
 	if [ -d "$xt_geoip_dir" ]; then
-		mkdir /usr/share/xt_geoip/
+		mkdir xt_geoip_dir
 	fi
 	chmod +x xt_geoip_dir
 	create_update_sh
