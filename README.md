@@ -30,7 +30,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-insta
 ```
 
 
-> **-limit Note:**  **ACCEPT** (Allow IPs) **DROP** (good to INPUT, DoS Protection, block+no answer+timeout) **REJECT** (block+no timeout for client)
+> **-limit:**  **Accept** (allow IPs) **DROP** (good to input, DoS protection, block, no answer, timeout) **REJECT** (block + no timeout for client)
 
 
 [![Stargazers over time](https://starchart.cc/AliDbg/IPBAN.svg)](https://starchart.cc/AliDbg/IPBAN)
