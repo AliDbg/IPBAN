@@ -28,8 +28,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-insta
 ```
 bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-installer.sh) -remove 1
 ```
-_
-**Arguments**
+_**Arguments**_
 >
 > **-io:** **INPUT** or **OUTPUT**
 >
