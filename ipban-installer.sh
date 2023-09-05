@@ -71,10 +71,6 @@ iptables_rules(){
 	ip6tables -A "${IO}" -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
 	iptables -A "${IO}" -m geoip -p udp  -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
 	ip6tables -A "${IO}" -m geoip -p udp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
-	if [[ $NOICMP == 1 ]]; then
-		/sbin/iptables -t mangle -A PREROUTING -p icmp -j DROP
-		/sbin/ip6tables -t mangle -A PREROUTING -p icmp -j DROP
-	fi
 }
 
 install_ipban(){
