@@ -37,7 +37,7 @@ iptables_save_restart(){
 	systemctl restart iptables.service ip6tables.service
 }
 uninstall_ipban(){
-	rm /usr/share/ipban/ -rf
+	rm -rf /usr/share/ipban/
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	systemctl stop netfilter-persistent.service && systemctl disable netfilter-persistent.service
 	iptables_reset_rules
