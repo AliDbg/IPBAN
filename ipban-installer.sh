@@ -48,7 +48,6 @@ uninstall_ipban(){
 create_update_sh(){
 cat > "${HOME}/ipban-update.sh" << EOF
 #!/bin/bash
-
 workdir=\$(mktemp -d)
 cd "\${workdir}"
 /usr/libexec/xtables-addons/xt_geoip_dl
@@ -58,9 +57,7 @@ modprobe x_tables
 modprobe xt_geoip
 lsmod | grep ^xt_geoip
 iptables -m geoip -h && ip6tables -m geoip -h
-
 systemctl restart iptables.service ip6tables.service
-
 clear && echo "Updated IPBAN!" 
 EOF
 chmod +x "${HOME}/ipban-update.sh"
@@ -114,4 +111,3 @@ fi
 if [[ $INSTALL == 1 ]]; then
 	install_ipban
 fi
-
