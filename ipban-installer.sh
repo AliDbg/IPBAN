@@ -7,7 +7,6 @@ INSTALL=0
 RESET=0
 REMOVE=0
 ADD=0
-NOICMP=0
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -15,7 +14,6 @@ while [ "$#" -gt 0 ]; do
     -reset) RESET="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
     -install) INSTALL="$2"; shift 2;;
-	-noicmp) NOICMP="$2"; shift 2;;
     -geoip) GEOIP="$2"; shift 2;;
     -limit) LIMIT="$2"; shift 2;;
     -io) IO="$2"; shift 2;;
