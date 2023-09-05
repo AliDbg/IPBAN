@@ -74,10 +74,13 @@ iptables_rules(){
 }
 
 install_ipban(){
-	apt update && apt -y upgrade
+	apt -y update && apt -y upgrade && apt -y autoremove
 	apt -y install curl unzip perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent 
-
-	mkdir /usr/share/xt_geoip/ && chmod +x /usr/share/xt_geoip/
+	xt_geoip_dir=/usr/share/xt_geoip/
+	if [ -d "$xt_geoip_dir" ]; then
+		mkdir /usr/share/xt_geoip/
+	fi
+	chmod +x xt_geoip_dir
 	create_update_sh
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "0 3 */2 * * ${HOME}/ipban-update.sh") | crontab -
