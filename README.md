@@ -1,13 +1,13 @@
 # IPBAN
 
-- Limit server input/output to IP countries
-- Support TCP,UDP
-- Support IPv4, IPv6
-- Support Multi Port
-- Support Multi Country
-- Persistent settings after reboot
-- Automatic IP update every 2 days
-- Support Debian, Ubuntu (v22 Tested)
+-Restrict server input and output to IP countries.
+-Support TCP and UDP.
+-Support IPv4 and IPv6.
+-Support Multi-Port
+-Support Multi-Country
+-Remaining settings after reboot
+-Automatic IP update every 2 days
+-Support to Debian and Ubuntu (v22, tested)
 
 **Install**
 ```
