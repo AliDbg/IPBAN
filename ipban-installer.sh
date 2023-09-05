@@ -7,6 +7,7 @@ INSTALL=0
 RESET=0
 REMOVE=0
 ADD=0
+NOICMP=0
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -14,6 +15,7 @@ while [ "$#" -gt 0 ]; do
     -reset) RESET="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
     -install) INSTALL="$2"; shift 2;;
+	-noicmp) NOICMP="$2"; shift 2;;
     -geoip) GEOIP="$2"; shift 2;;
     -limit) LIMIT="$2"; shift 2;;
     -io) IO="$2"; shift 2;;
@@ -69,6 +71,10 @@ iptables_rules(){
 	ip6tables -A "${IO}" -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
 	iptables -A "${IO}" -m geoip -p udp  -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
 	ip6tables -A "${IO}" -m geoip -p udp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
+	if [[ $NOICMP == 1 ]]; then
+		iptables -A INPUT --proto icmp -j DROP
+		ip6tables -A INPUT --proto icmp -j DROP
+	fi
 }
 
 install_ipban(){
