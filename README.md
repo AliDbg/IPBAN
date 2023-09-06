@@ -1,9 +1,8 @@
 ## IPBAN (Limiting IP countries with iptables)
 
 - Restrict server input and output to IP countries.
-- Support TCP and UDP.
+- Support All Protocols and Ports.
 - Support IPv4 and IPv6.
-- Support Multi-Port
 - Support Multi-Country
 - Persistent settings after reboot
 - Automatic IP update every two days
