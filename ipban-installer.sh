@@ -72,8 +72,8 @@ iptables_rules(){
 		CC="src"
 	fi
 	
-	iptables -A "${IO}" -m geoip -p all  -m multiport --dports 0:9999 --"$CC"-cc "${GEOIP}" -j "${LIMIT}"
-	ip6tables -A "${IO}" -m geoip -p all -m multiport --dports 0:9999 --"$CC"-cc "${GEOIP}" -j "${LIMIT}"
+	iptables -A "${IO}" -m geoip -m multiport --dports 0:9999 --"$CC"-cc "${GEOIP}" -j "${LIMIT}"
+	ip6tables -A "${IO}" -m geoip -m multiport --dports 0:9999 --"$CC"-cc "${GEOIP}" -j "${LIMIT}"
 	
 	if [[ "$NOICMP" == 1 ]]; then
 		iptables -A INPUT -p icmp -j DROP
