@@ -8,7 +8,6 @@ RESET=0
 REMOVE=0
 ADD=0
 NOICMP=0
-CC="dst"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -68,19 +67,32 @@ chmod +x "/usr/share/ipban/ipban-update.sh"
 }
 
 iptables_rules(){
-	if [[ "$IO" == "INPUT" ]]; then
-		CC="src"
-	fi
-	
-	iptables -A "${IO}" -m geoip -p tcp  -m multiport --dports 0:9999 --"$CC"-cc "${GEOIP}" -j "${LIMIT}"
-	ip6tables -A "${IO}" -m geoip -p tcp -m multiport --dports 0:9999 --"$CC"-cc "${GEOIP}" -j "${LIMIT}"
-	iptables -A "${IO}" -m geoip -p udp  -m multiport --dports 0:9999 --"$CC"-cc "${GEOIP}" -j "${LIMIT}"
-	ip6tables -A "${IO}" -m geoip -p udp -m multiport --dports 0:9999 --"$CC"-cc "${GEOIP}" -j "${LIMIT}"
-	
 	if [[ "$NOICMP" == 1 ]]; then
 		iptables -A INPUT -p icmp -j DROP
 		ip6tables -A INPUT -p icmp -j DROP
+	fi	
+
+	if [[ "$IO" == "INPUT" && "$LIMIT" == "ACCEPT" ]]; then
+		iptables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
+		ip6tables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
 	fi
+	
+	if [[ "$IO" == "INPUT" && "$LIMIT" == "DROP" ]]; then
+		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j DROP
+		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j DROP
+	fi
+	
+	if [[ "$IO" == "OUTPUT" && "$LIMIT" == "DROP" ]]; then
+		iptables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j DROP
+		ip6tables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j DROP
+	fi
+	
+	if [[ "$IO" == "OUTPUT" && "$LIMIT" == "ACCEPT" ]]; then
+		iptables -A OUTPUT -m geoip ! --dst-cc "${GEOIP}" -j DROP
+		ip6tables -A OUTPUT -m geoip ! --dst-cc "${GEOIP}" -j DROP
+	fi
+
+
 }
 
 install_ipban(){
