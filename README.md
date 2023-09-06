@@ -30,7 +30,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-insta
 ```
 **Arguments**
 >
-> **-io** **INPUT** or **OUTPUT**
+> **-io** **INPUT** or **OUTPUT** or **FORWARD**
 >
 > **-geoip** Country	Alpha-2 code
 >
