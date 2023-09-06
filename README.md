@@ -34,7 +34,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-insta
 >
 > **-geoip** Country	Alpha-2 code
 >
-> **-limit**  **ACCEPT** (allow IPs) **DROP** (good to input, DoS protection, block, no answer, timeout) **REJECT** (block + no timeout for client)
+> **-limit**  **ACCEPT** (allow IPs) **DROP** (block, no answer)
 >
 > **-noicmp** 1 > Disable ICMP Protocol for deny ping
 
