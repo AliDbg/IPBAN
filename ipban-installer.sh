@@ -8,6 +8,7 @@ RESET=0
 REMOVE=0
 ADD=0
 NOICMP=0
+CC="dst"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -67,13 +68,16 @@ chmod +x "/usr/share/ipban/ipban-update.sh"
 }
 
 iptables_rules(){
-	iptables -A "${IO}" -m geoip -p tcp  -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
-	ip6tables -A "${IO}" -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
-	iptables -A "${IO}" -m geoip -p udp  -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
-	ip6tables -A "${IO}" -m geoip -p udp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
-	if [[ $NOICMP == 1 ]]; then
-		iptables -A INPUT --proto icmp -j DROP
-		ip6tables -A INPUT --proto icmp -j DROP
+	if [[ "$IO" == "INPUT" ]]; then
+		CC="src"
+	fi
+	
+	iptables -A "${IO}" -m geoip -p all  -m multiport --dports 0:9999 --"${CC}"-cc "${GEOIP}" -j "${LIMIT}"
+	ip6tables -A "${IO}" -m geoip -p all -m multiport --dports 0:9999 --"${CC}"-cc "${GEOIP}" -j "${LIMIT}"
+	
+	if [[ "$NOICMP" == 1 ]]; then
+		iptables -A INPUT -p icmp -j DROP
+		ip6tables -A INPUT -p icmp -j DROP
 	fi
 }
 
