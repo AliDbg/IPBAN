@@ -77,7 +77,7 @@ modprobe x_tables && modprobe xt_geoip
 lsmod | grep ^xt_geoip
 lsmod | grep ^x_tables
 systemctl restart iptables.service ip6tables.service
-clear && echo "Updated IPBAN!" 
+echo "Updated IPBAN!" 
 EOF
 chmod +x "/usr/share/ipban/ipban-update.sh"
 }
