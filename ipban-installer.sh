@@ -29,7 +29,6 @@ success() {
 	clear
 	iptables -vnL
 	echo -e "${Green}[+]${Font} $*"
-	exit 0
 }
 iptables_reset_rules(){
 	iptables -F && iptables -X && iptables -Z && ip6tables -F && ip6tables -X && ip6tables -Z 
@@ -127,7 +126,6 @@ add_ipban(){
 
 reset_iptables(){
 	echo "Hello reset"
-	exit 0
 	iptables_reset_rules
 	iptables_save_restart
 	success "Resetted IPTABLES!"
