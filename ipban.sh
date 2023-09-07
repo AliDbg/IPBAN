@@ -57,8 +57,8 @@ create_update_sh(){
 mkdir -p /usr/share/ipban/ && chmod a+rwx /usr/share/ipban/
 cat > "/usr/share/ipban/ipban-update.sh" << EOF
 #!/bin/bash
-MON=$(date +"%m")
-YR=$(date +"%Y")
+MON=\$(date +"%m")
+YR=\$(date +"%Y")
 dbipcsv="/usr/share/xt_geoip/dbip-country-lite.csv.gz"
 workdir=\$(mktemp -d)
 cd "\${workdir}"
@@ -66,8 +66,8 @@ cd "\${workdir}"
 /usr/libexec/xtables-addons/xt_geoip_build -s
 cd && rm -rf "\${workdir}"
 
-wget https://download.db-ip.com/free/dbip-country-lite-${YR}-${MON}.csv.gz -O "${dbipcsv}"
-gzip -d "${dbipcsv}" && rm "${dbipcsv}"
+wget https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz -O "\${dbipcsv}"
+gzip -d "\${dbipcsv}" && rm "\${dbipcsv}"
 /usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/ *.csv
 rm /usr/share/xt_geoip/dbip-country-lite.csv
 
