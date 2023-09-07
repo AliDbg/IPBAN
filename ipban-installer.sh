@@ -75,22 +75,22 @@ chmod +x "/usr/share/ipban/ipban-update.sh"
 }
 
 iptables_rules(){
-	if [[ "$NOICMP" == 1 ]]; then
+	if [[ ${NOICMP} == *"y"* ]]; then
 		iptables -A INPUT -p icmp -j DROP
 		ip6tables -A INPUT -p icmp -j DROP
 	fi	
 
-	if [[ "$IO" == "INPUT" && "$LIMIT" == "ACCEPT" ]]; then
+	if [[ ${IO} == *"I"* && ${LIMIT} == *"A"* ]]; then
 		iptables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
 		ip6tables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
 	fi
 	
-	if [[ "$IO" == "INPUT" && "$LIMIT" == "DROP" ]]; then
+	if [[ ${IO} == *"I"* && ${LIMIT} == *"D"* ]]; then
 		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j DROP
 		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j DROP
 	fi
 	
-	if [[ "$IO" == "OUTPUT" ]]; then
+	if [[ ${IO} == *"O"* ]]; then
 		iptables -A OUTPUT -p tcp -m multiport --dports 0:9999 -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A OUTPUT -p tcp -m multiport --dports 0:9999 -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 		
@@ -98,7 +98,7 @@ iptables_rules(){
 		ip6tables -A OUTPUT -p udp -m multiport --dports 0:9999 -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 	fi
 		
-	if [[ "$IO" == "FORWARD" ]]; then
+	if [[ ${IO} == *"F"* ]]; then
 		iptables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 	fi
