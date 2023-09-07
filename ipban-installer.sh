@@ -83,7 +83,8 @@ iptables_rules(){
 		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j DROP
 	fi
 	
-REJECT		iptables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j DROP
+	if [[ "$IO" == "OUTPUT" && "$LIMIT" == "DROP" ]]; then
+		iptables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j DROP
 		ip6tables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j DROP
 	fi
 	
