@@ -121,15 +121,14 @@ install_ipban(){
 
 add_ipban(){
 	iptables_rules
-	iptables_save_restart
+	#iptables_save_restart
 	success "Added Rules!"
 }
 
 reset_iptables(){
 	iptables_reset_rules
-	sleep 2
 	iptables_save_restart
-	echo "Resetted IPTABLES!"
+	success "Resetted IPTABLES!"
 }
 
 if [[ $RESET == 1 ]]; then
