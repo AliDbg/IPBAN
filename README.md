@@ -36,9 +36,9 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-insta
 >
 > **-geoip** Country	Alpha-2 code
 >
-> **-limit**  **ACCEPT** or **REJECT** 
+> **-limit**  **DROP**(Reject) or **ACCEPT**(Allow)
 >
-> **-noicmp** 1 > Disable ICMP Protocol for deny ping
+> **-noicmp 1** (Disable ICMP Protocol for deny ping)
 
 
 [![Stargazers over time](https://starchart.cc/AliDbg/IPBAN.svg)](https://starchart.cc/AliDbg/IPBAN)
