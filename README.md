@@ -41,4 +41,9 @@ bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -remove
 > **-noicmp 1** (Disable ICMP Protocol for deny ping)
 
 
+**useful site**
+>https://sshwifty-demo.nirui.org/
+>https://check-host.net
+
+
 [![Stargazers over time](https://starchart.cc/AliDbg/IPBAN.svg)](https://starchart.cc/AliDbg/IPBAN)
