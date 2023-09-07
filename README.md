@@ -40,8 +40,8 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -
 > **-noicmp 1** (Disable ICMP Protocol for deny ping)
 
 
-**useful site**
-> https://github.com/nirui/sshwifty https://sshwifty-demo.nirui.org/
+## Tools
+> SSH Wifty https://github.com/nirui/sshwifty https://sshwifty-demo.nirui.org/
 >
 > https://check-host.net
 
