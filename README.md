@@ -1,13 +1,14 @@
 ## IPBAN (Limiting IP countries with iptables)
 
 - Restrict server input and output to IP countries.
-- Support All Protocols and Ports.
-- Support IPv4 and IPv6.
+- Support TCP and UDP Protocols
+- Support Multi-Port
+- Support IPv4 and IPv6
 - Support Multi-Country
 - Persistent settings after reboot
 - Automatic IP update every two days
 - Support for Debian and Ubuntu (v22, tested)
-
+  
 **Install**
 ```
 bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -install yes -io OUTPUT -geoip CN,IR,CU,VN,ZW,BY -limit DROP -noicmp yes
@@ -17,8 +18,6 @@ bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -instal
 **Add Rules**
 ```
 bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -add yes -io INPUT -geoip CN,RU -limit DROP
-# or ↓
-bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -add yes -io INPUT -geoip IR -limit ACCEPT
 ```
 
 **Reset Rules**
