@@ -2,7 +2,7 @@
 
 IO="x"
 GEOIP="CN,IR,CU,VN,ZW,BY"
-LIMIT="DROP"
+LIMIT="x"
 INSTALL="n"
 RESET="n"
 REMOVE="n"
