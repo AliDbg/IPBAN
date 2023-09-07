@@ -108,7 +108,7 @@ iptables_rules(){
 
 install_ipban(){
 	apt -y update && apt -y upgrade
-	apt -y install curl unzip gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl libgeoip2-perl iptables-persistent && apt -y autoremove
+	apt -y install curl unzip gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent
 	mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	chmod 755 /usr/lib/xtables-addons/xt_geoip_build
 	create_update_sh
