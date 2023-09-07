@@ -11,23 +11,23 @@
   
 **Install**
 ```
-bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -install yes -io OUTPUT -geoip CN,IR,CU,VN,ZW,BY -limit DROP -noicmp yes
+bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -install yes -io OUTPUT -geoip CN,IR,CU,VN,ZW,BY -limit DROP -noicmp yes
 ```
 
 
 **Add Rules**
 ```
-bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -add yes -io INPUT -geoip CN,RU -limit DROP
+bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -add yes -io INPUT -geoip CN,RU -limit DROP
 ```
 
 **Reset Rules**
 ```
-bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -reset yes
+bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -reset yes
 ```
 
 **Remove IPBAN**
 ```
-bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -remove yes
+bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -remove yes
 ```
 **Arguments**
 >
