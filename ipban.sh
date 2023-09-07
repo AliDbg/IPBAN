@@ -67,9 +67,9 @@ cd "\${workdir}"
 cd && rm -rf "\${workdir}"
 
 wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
-gzip -d "\${dbipcsv}" && cd /usr/share/xt_geoip/
+gzip -d -q -f "\${dbipcsv}" && cd /usr/share/xt_geoip/
 /usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
-rm /usr/share/xt_geoip/dbip-country-lite.csv
+cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
 
 modprobe x_tables && modprobe xt_geoip
 lsmod | grep ^xt_geoip
