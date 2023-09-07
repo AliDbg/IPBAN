@@ -61,15 +61,21 @@ cat > "/usr/share/ipban/ipban-update.sh" << EOF
 #!/bin/bash
 MON=$(date +"%m")
 YR=$(date +"%Y")
+
+workdir=\$(mktemp -d)
+cd "\${workdir}"
+/usr/libexec/xtables-addons/xt_geoip_dl
+/usr/libexec/xtables-addons/xt_geoip_build -s
+cd && rm -rf "\${workdir}"
+
 wget https://download.db-ip.com/free/dbip-country-lite-${YR}-${MON}.csv.gz -O /usr/share/xt_geoip/dbip-country-lite.csv.gz
 unzip /usr/share/xt_geoip/dbip-country-lite.csv.gz
 /usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/ -S /usr/share/xt_geoip/
 rm /usr/share/xt_geoip/dbip-country-lite.csv
-modprobe x_tables
-modprobe xt_geoip
+
+modprobe x_tables && modprobe xt_geoip
 lsmod | grep ^xt_geoip
 lsmod | grep ^x_tables
-iptables -m geoip -h && ip6tables -m geoip -h
 systemctl restart iptables.service ip6tables.service
 clear && echo "Updated IPBAN!" 
 EOF
