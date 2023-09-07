@@ -82,19 +82,16 @@ iptables_rules(){
 		ip6tables -A INPUT -p icmp -j DROP
 	fi	
 	
-	if [[ ${IO} == *"I"* && ${LIMIT} == *"A"* ]]; then
-		iptables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
-		ip6tables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
-	fi
-	
-	if [[ ${IO} == *"I"* && ${LIMIT} == *"D"* ]]; then
+	if [[ ${IO} == *"I"* ]]; then
 		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 	fi
 	
 	if [[ ${IO} == *"O"* ]]; then
-		iptables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
-		ip6tables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
+		iptables  -A OUTPUT -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
+		ip6tables -A OUTPUT -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
+		iptables  -A OUTPUT -m geoip -p udp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
+		ip6tables -A OUTPUT -m geoip -p udp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"		
 	fi
 		
 	if [[ ${IO} == *"F"* ]]; then
