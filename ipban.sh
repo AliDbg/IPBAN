@@ -78,8 +78,8 @@ chmod +x "/usr/share/ipban/ipban-update.sh"
 iptables_rules(){
 
 	if [[ ${NOICMP} == *"y"* ]]; then
-		iptables -A INPUT -p icmp --icmp-type echo-request -j DROP 
-		ip6tables -A INPUT -p icmp --icmp-type echo-request -j DROP 
+		iptables -A INPUT -p icmp -j DROP
+		ip6tables -A INPUT -p icmp -j DROP
 	fi	
 	
 	if [[ ${IO} == *"I"* && ${LIMIT} == *"A"* ]]; then
