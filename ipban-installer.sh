@@ -39,12 +39,18 @@ iptables_save_restart(){
 	iptables-save > /etc/iptables/rules.v4 && ip6tables-save > /etc/iptables/rules.v6
 	systemctl restart iptables.service ip6tables.service
 }
+
+iptables_restore_restart(){
+	iptables-restore < /usr/share/ipban/old_rules.v4 && ip6tables-restore < /usr/share/ipban/old_rules.v6 && 
+	systemctl restart iptables.service ip6tables.service
+}
+
 uninstall_ipban(){
-	rm -rf /usr/share/ipban/
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	systemctl stop netfilter-persistent.service && systemctl disable netfilter-persistent.service
 	iptables_reset_rules
-	iptables_save_restart
+	iptables_restore_restart
+	rm -rf /usr/share/ipban/
 	success "Uninstalled IPBAN!"
 }
 
@@ -60,6 +66,7 @@ cd && rm -rf "\${workdir}"
 modprobe x_tables
 modprobe xt_geoip
 lsmod | grep ^xt_geoip
+lsmod | grep ^x_tables
 iptables -m geoip -h && ip6tables -m geoip -h
 systemctl restart iptables.service ip6tables.service
 clear && echo "Updated IPBAN!" 
@@ -78,21 +85,19 @@ iptables_rules(){
 		ip6tables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
 	fi
 	
-	if [[ "$IO" == "INPUT" && "$LIMIT" == "REJECT" ]]; then
+	if [[ "$IO" == "INPUT" && "$LIMIT" == "DROP" ]]; then
 		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j DROP
 		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j DROP
 	fi
 	
-	if [[ "$IO" == "OUTPUT" && "$LIMIT" == "DROP" ]]; then
-		iptables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j DROP
-		ip6tables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j DROP
+	if [[ "$IO" == "OUTPUT" ]]; then
+		iptables -A OUTPUT -p tcp -m multiport --dports 0:9999 -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
+		ip6tables -A OUTPUT -p tcp -m multiport --dports 0:9999 -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
+		
+		iptables -A OUTPUT -p udp -m multiport --dports 0:9999 -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
+		ip6tables -A OUTPUT -p udp -m multiport --dports 0:9999 -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 	fi
-	
-	if [[ "$IO" == "OUTPUT" && "$LIMIT" == "ACCEPT" ]]; then
-		iptables -A OUTPUT -m geoip ! --dst-cc "${GEOIP}" -j DROP
-		ip6tables -A OUTPUT -m geoip ! --dst-cc "${GEOIP}" -j DROP
-	fi
-	
+		
 	if [[ "$IO" == "FORWARD" ]]; then
 		iptables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
