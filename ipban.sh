@@ -82,13 +82,13 @@ iptables_rules(){
 	fi	
 	
 	if [[ ${IO} == *"I"* && ${LIMIT} == *"A"* ]]; then
-		iptables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
-		ip6tables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
+		iptables -A INPUT -p tcp -m multiport --dports 0:9999 -m geoip ! --src-cc "${GEOIP}" -j DROP
+		ip6tables -A INPUT -p tcp -m multiport --dports 0:9999 -m geoip ! --src-cc "${GEOIP}" -j DROP
 	fi
 	
 	if [[ ${IO} == *"I"* && ${LIMIT} == *"D"* ]]; then
-		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
-		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
+		iptables -A INPUT -p tcp -m multiport --dports 0:9999 -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
+		ip6tables -A INPUT -p tcp -m multiport --dports 0:9999 -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 	fi
 	
 	if [[ ${IO} == *"O"* ]]; then
@@ -100,8 +100,8 @@ iptables_rules(){
 	fi
 		
 	if [[ ${IO} == *"F"* ]]; then
-		iptables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
-		ip6tables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
+		iptables -A FORWARD -p tcp -m multiport --dports 0:9999 -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
+		ip6tables -A FORWARD -p tcp -m multiport --dports 0:9999 -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 	fi
 }
 
