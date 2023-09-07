@@ -41,9 +41,9 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -
 
 
 ## Tools
-> SSH Wifty https://github.com/nirui/sshwifty https://sshwifty-demo.nirui.org/
+> SSH Client: https://github.com/nirui/sshwifty https://sshwifty-demo.nirui.org/
 >
-> https://check-host.net
+> Checker: https://check-host.net
 
 
 [![Stargazers over time](https://starchart.cc/AliDbg/IPBAN.svg)](https://starchart.cc/AliDbg/IPBAN)
