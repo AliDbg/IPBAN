@@ -37,7 +37,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -
 >
 > **-limit**  **DROP**(Reject) or **ACCEPT**(Allow)
 >
-> **-noicmp 1** (Disable ICMP Protocol for deny ping)
+> **-noicmp yes** (Disable ICMP Protocol for deny ping)
 
 
 ## Tools
