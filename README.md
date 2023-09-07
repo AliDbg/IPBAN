@@ -10,7 +10,7 @@
 
 **Install**
 ```
-bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-installer.sh) -install yes-io OUTPUT -geoip CN,IR,CU,VN,ZW,BY -limit DROP -noicmp y
+bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban-installer.sh) -install yes -io OUTPUT -geoip CN,IR,CU,VN,ZW,BY -limit DROP -noicmp y
 ```
 
 
