@@ -10,26 +10,26 @@
 
 **Install**
 ```
-bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban-installer.sh) -install yes -io OUTPUT -geoip CN,IR,CU,VN,ZW,BY -limit DROP -noicmp yes
+bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -install yes -io OUTPUT -geoip CN,IR,CU,VN,ZW,BY -limit DROP -noicmp yes
 ```
 
 
 **Add Rules**
 ```
-bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban-installer.sh) -add yes -io INPUT -geoip IR -limit ACCEPT
+bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -add yes -io INPUT -geoip IR -limit ACCEPT
 
 # or ↓
-bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban-installer.sh) -add yes -io INPUT -geoip CN,RU,US -limit DROP
+bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -add yes -io INPUT -geoip CN,RU,US -limit DROP
 ```
 
 **Reset Rules**
 ```
-bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban-installer.sh) -reset yes
+bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -reset yes
 ```
 
 **Remove IPBAN**
 ```
-bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban-installer.sh) -remove yes
+bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -remove yes
 ```
 **Arguments**
 >
