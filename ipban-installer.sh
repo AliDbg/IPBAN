@@ -126,6 +126,8 @@ add_ipban(){
 }
 
 reset_iptables(){
+	echo "Hello reset"
+	exit 0
 	iptables_reset_rules
 	iptables_save_restart
 	success "Resetted IPTABLES!"
