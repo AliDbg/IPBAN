@@ -12,7 +12,7 @@ NOICMP=0
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -add) ADD="$2"; shift 2;;
-    -reset) RESETT="$2"; shift 2;;
+    -resett) RESETT="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
     -install) INSTALL="$2"; shift 2;;
 	-noicmp) NOICMP="$2"; shift 2;;
