@@ -93,11 +93,8 @@ iptables_rules(){
 	fi
 	
 	if [[ ${IO} == *"O"* ]]; then
-		iptables -A OUTPUT -p tcp -m multiport --dports 0:9999 -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
-		ip6tables -A OUTPUT -p tcp -m multiport --dports 0:9999 -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
-		
-		iptables -A OUTPUT -p udp -m multiport --dports 0:9999 -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
-		ip6tables -A OUTPUT -p udp -m multiport --dports 0:9999 -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
+		iptables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
+		ip6tables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 	fi
 		
 	if [[ ${IO} == *"F"* ]]; then
