@@ -7,7 +7,7 @@
 - Support Multi-Country
 - Persistent settings after reboot
 - Automatic IP update every two days
-- Support Debian and Ubuntu
+- Support Ubuntu Linux v20-22
   
 **Install**
 ```
