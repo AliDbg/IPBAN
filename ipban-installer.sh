@@ -3,11 +3,11 @@
 IO="OUTPUT"
 GEOIP="CN,IR,CU,VN,ZW,BY"
 LIMIT="DROP"
-INSTALL="y"
-RESET="y"
-REMOVE="y"
-ADD="y"
-NOICMP="y"
+INSTALL="n"
+RESET="n"
+REMOVE="n"
+ADD="n"
+NOICMP="n"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
