@@ -42,9 +42,9 @@ bash <(wget -qO- https://cdn.jsdelivr.net/gh/AliDbg/IPBAN@main/ipban.sh) -remove
 
 
 **useful site**
->https://sshwifty-demo.nirui.org/
+> https://github.com/nirui/sshwifty https://sshwifty-demo.nirui.org/
 >
->https://check-host.net
+> https://check-host.net
 
 
 [![Stargazers over time](https://starchart.cc/AliDbg/IPBAN.svg)](https://starchart.cc/AliDbg/IPBAN)
