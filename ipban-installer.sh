@@ -4,7 +4,7 @@ IO="OUTPUT"
 GEOIP="CN,IR,CU,VN,ZW,BY"
 LIMIT="DROP"
 INSTALL=0
-RESETRULE=0
+RESET=0
 REMOVE=0
 ADD=0
 NOICMP=0
@@ -12,7 +12,7 @@ NOICMP=0
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -add) ADD="$2"; shift 2;;
-    -reset) RESETRULE="$2"; shift 2;;
+    -reset) RESET="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
     -install) INSTALL="$2"; shift 2;;
 	-noicmp) NOICMP="$2"; shift 2;;
@@ -133,18 +133,18 @@ reset_iptables(){
 	success "Resetted IPTABLES!"
 }
 
-if [[ $RESETRULE == 1 ]]; then
+if [[ "$RESET" == "1" ]]; then
 	reset_iptables
 fi
 
-if [[ $ADD == 1 ]]; then
+if [[ "$ADD" == "1" ]]; then
 	add_ipban
 fi
 
-if [[ $REMOVE == 1 ]]; then
+if [[ "$REMOVE" == "1" ]]; then
 	uninstall_ipban
 fi
 
-if [[ $INSTALL == 1 ]]; then
+if [[ "$INSTALL" == "1" ]]; then
 	install_ipban
 fi
