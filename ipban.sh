@@ -62,7 +62,7 @@ cat > "/usr/share/ipban/ipban-update.sh" << EOF
 MON=$(date +"%m")
 YR=$(date +"%Y")
 wget https://download.db-ip.com/free/dbip-country-lite-${YR}-${MON}.csv.gz -O /usr/share/xt_geoip/dbip-country-lite.csv.gz
-gunzip /usr/share/xt_geoip/dbip-country-lite.csv.gz
+unzip /usr/share/xt_geoip/dbip-country-lite.csv.gz
 /usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/ -S /usr/share/xt_geoip/
 rm /usr/share/xt_geoip/dbip-country-lite.csv
 modprobe x_tables
@@ -104,7 +104,7 @@ iptables_rules(){
 
 install_ipban(){
 	apt -y update && apt -y upgrade
-	apt -y install curl unzip perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent && apt -y autoremove
+	apt -y install curl unzip gunzip perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent && apt -y autoremove
 	mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	create_update_sh
 	crontab -l | grep -v "ipban-update.sh" | crontab -
