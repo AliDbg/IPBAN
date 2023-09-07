@@ -1,13 +1,13 @@
 #!/bin/bash
 
-IO="OUTPUT"
+IO="x"
 GEOIP="CN,IR,CU,VN,ZW,BY"
 LIMIT="DROP"
 INSTALL="n"
 RESET="n"
 REMOVE="n"
 ADD="n"
-NOICMP="n"
+NOICMP="x"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -75,11 +75,12 @@ chmod +x "/usr/share/ipban/ipban-update.sh"
 }
 
 iptables_rules(){
+
 	if [[ ${NOICMP} == *"y"* ]]; then
 		iptables -A INPUT -p icmp -j DROP
 		ip6tables -A INPUT -p icmp -j DROP
 	fi	
-
+	
 	if [[ ${IO} == *"I"* && ${LIMIT} == *"A"* ]]; then
 		iptables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
 		ip6tables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
