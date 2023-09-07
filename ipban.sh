@@ -65,15 +65,15 @@ cd "\${workdir}"
 /usr/libexec/xtables-addons/xt_geoip_dl
 /usr/libexec/xtables-addons/xt_geoip_build -s
 cd && rm -rf "\${workdir}"
-
 wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
 gzip -d -q -f "\${dbipcsv}" && cd /usr/share/xt_geoip/
 /usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
 cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
-
+sleep 1
 modprobe x_tables && modprobe xt_geoip
-lsmod | grep ^xt_geoip
 lsmod | grep ^x_tables
+lsmod | grep ^xt_geoip
+sleep 1
 systemctl restart iptables.service ip6tables.service
 clear && echo "Updated IPBAN!" 
 EOF
@@ -104,18 +104,18 @@ iptables_rules(){
 		iptables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 	fi
+	sleep 1
 }
 
 install_ipban(){
 	apt -y update && apt -y upgrade
 	apt -y install curl unzip gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent
 	mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
-	chmod 755 /usr/lib/xtables-addons/xt_geoip_build
 	create_update_sh
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "0 3 */2 * * /usr/share/ipban/ipban-update.sh") | crontab -
 	bash "/usr/share/ipban/ipban-update.sh"
-	iptables-save > /usr/share/ipban/old_rules.v4 && ip6tables-save > /usr/share/ipban/old_rules.v6
+	#iptables-save > /usr/share/ipban/old_rules.v4 && ip6tables-save > /usr/share/ipban/old_rules.v6
 	iptables_reset_rules
 	iptables_rules
 	systemctl enable netfilter-persistent.service && iptables_save_restart
