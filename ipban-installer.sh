@@ -2,7 +2,7 @@
 
 IO="x"
 GEOIP="CN,IR,CU,VN,ZW,BY"
-LIMIT="DROP"
+LIMIT="x"
 INSTALL="n"
 RESET="n"
 REMOVE="n"
@@ -86,7 +86,7 @@ iptables_rules(){
 		ip6tables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
 	fi
 	
-	if [[ ${IO} == *"I"* && ${LIMIT} == *"DROP"* ]]; then
+	if [[ ${IO} == *"I"* && ${LIMIT} == *"D"* ]]; then
 		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 	fi
