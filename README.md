@@ -2,8 +2,8 @@
 
 - Restrict server input and output to IP countries.
 - Support TCP and UDP Protocols
-- Support Multi-Port
 - Support IPv4 and IPv6
+- Support Multi-Port
 - Support Multi-Country
 - Persistent settings after reboot
 - Automatic IP update every two days
