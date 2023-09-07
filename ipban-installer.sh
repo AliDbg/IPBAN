@@ -4,7 +4,7 @@ IO="OUTPUT"
 GEOIP="CN,IR,CU,VN,ZW,BY"
 LIMIT="DROP"
 INSTALL=0
-RESETT=0
+RESETRULE=0
 REMOVE=0
 ADD=0
 NOICMP=0
@@ -12,7 +12,7 @@ NOICMP=0
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -add) ADD="$2"; shift 2;;
-    -resett) RESETT="$2"; shift 2;;
+    -reset) RESETRULE="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
     -install) INSTALL="$2"; shift 2;;
 	-noicmp) NOICMP="$2"; shift 2;;
@@ -131,7 +131,7 @@ reset_iptables(){
 	success "Resetted IPTABLES!"
 }
 
-if [[ $RESETT == 1 ]]; then
+if [[ $RESETRULE == 1 ]]; then
 	reset_iptables
 fi
 
