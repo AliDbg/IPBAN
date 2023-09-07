@@ -67,7 +67,7 @@ cd "\${workdir}"
 cd && rm -rf "\${workdir}"
 
 wget https://download.db-ip.com/free/dbip-country-lite-${YR}-${MON}.csv.gz -O /usr/share/xt_geoip/dbip-country-lite.csv.gz
-gzip -d /usr/share/xt_geoip/dbip-country-lite.csv.gz
+gzip -d /usr/share/xt_geoip/dbip-country-lite.csv.gz && rm /usr/share/xt_geoip/dbip-country-lite.csv.gz
 /usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/ -S /usr/share/xt_geoip/
 rm /usr/share/xt_geoip/dbip-country-lite.csv
 
