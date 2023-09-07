@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 IO="x"
 GEOIP="CN,IR,CU,VN,ZW,BY"
 LIMIT="x"
