@@ -131,18 +131,18 @@ reset_iptables(){
 	success "Resetted IPTABLES!"
 }
 
-if [[ "$RESET" == "y" ]]; then
+if [[ ${RESET} == *"y"* ]]; then
 	reset_iptables
 fi
 
-if [[ "$ADD" == "y" ]]; then
+if [[ ${ADD} == *"y"* ]]; then
 	add_ipban
 fi
 
-if [[ "$REMOVE" == "y" ]]; then
+if [[ ${REMOVE} == *"y"* ]]; then
 	uninstall_ipban
 fi
 
-if [[ "$INSTALL" == "y" ]]; then
+if [[ ${INSTALL} == *"y"* ]]; then
 	install_ipban
 fi
