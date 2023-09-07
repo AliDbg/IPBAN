@@ -27,6 +27,7 @@ success() {
 	Green="\033[1;32m"
 	Font="\033[0m"
 	clear
+	iptables -vnL
 	echo -e "${Green}[+]${Font} $*"
 	exit 0
 }
@@ -77,19 +78,23 @@ iptables_rules(){
 		ip6tables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
 	fi
 	
-	if [[ "$IO" == "INPUT" && "$LIMIT" == "DROP" ]]; then
+	if [[ "$IO" == "INPUT" && "$LIMIT" == "REJECT" ]]; then
 		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j DROP
 		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j DROP
 	fi
 	
-	if [[ "$IO" == "OUTPUT" && "$LIMIT" == "DROP" ]]; then
-		iptables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j DROP
+REJECT		iptables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j DROP
 		ip6tables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j DROP
 	fi
 	
 	if [[ "$IO" == "OUTPUT" && "$LIMIT" == "ACCEPT" ]]; then
 		iptables -A OUTPUT -m geoip ! --dst-cc "${GEOIP}" -j DROP
 		ip6tables -A OUTPUT -m geoip ! --dst-cc "${GEOIP}" -j DROP
+	fi
+	
+	if [[ "$IO" == "FORWARD" ]]; then
+		iptables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
+		ip6tables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 	fi
 }
 
@@ -101,6 +106,7 @@ install_ipban(){
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "0 3 */2 * * /usr/share/ipban/ipban-update.sh") | crontab -
 	bash "/usr/share/ipban/ipban-update.sh"
+	iptables-save > /usr/share/ipban/old_rules.v4 && ip6tables-save > /usr/share/ipban/old_rules.v6
 	iptables_reset_rules
 	iptables_rules
 	systemctl enable netfilter-persistent.service && iptables_save_restart
