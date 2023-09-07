@@ -3,11 +3,11 @@
 IO="OUTPUT"
 GEOIP="CN,IR,CU,VN,ZW,BY"
 LIMIT="DROP"
-INSTALL=0
-RESET=0
-REMOVE=0
-ADD=0
-NOICMP=0
+INSTALL="y"
+RESET="y"
+REMOVE="y"
+ADD="y"
+NOICMP="y"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -29,6 +29,7 @@ success() {
 	clear
 	iptables -vnL
 	echo -e "${Green}[+]${Font} $*"
+	exit 0
 }
 iptables_reset_rules(){
 	iptables -F && iptables -X && iptables -Z && ip6tables -F && ip6tables -X && ip6tables -Z 
@@ -125,24 +126,23 @@ add_ipban(){
 }
 
 reset_iptables(){
-	echo "Hello reset"
 	iptables_reset_rules
 	iptables_save_restart
 	success "Resetted IPTABLES!"
 }
 
-if [[ "$RESET" == "1" ]]; then
+if [[ "$RESET" == "y" ]]; then
 	reset_iptables
 fi
 
-if [[ "$ADD" == "1" ]]; then
+if [[ "$ADD" == "y" ]]; then
 	add_ipban
 fi
 
-if [[ "$REMOVE" == "1" ]]; then
+if [[ "$REMOVE" == "y" ]]; then
 	uninstall_ipban
 fi
 
-if [[ "$INSTALL" == "1" ]]; then
+if [[ "$INSTALL" == "y" ]]; then
 	install_ipban
 fi
