@@ -86,9 +86,9 @@ iptables_rules(){
 		ip6tables -A INPUT -m geoip ! --src-cc "${GEOIP}" -j DROP
 	fi
 	
-	if [[ ${IO} == *"I"* && ${LIMIT} == *"D"* ]]; then
-		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j DROP
-		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j DROP
+	if [[ ${IO} == *"I"* && ${LIMIT} == *"DROP"* ]]; then
+		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
+		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 	fi
 	
 	if [[ ${IO} == *"O"* ]]; then
