@@ -7,7 +7,7 @@
 - Support Multi-Country
 - Persistent settings after reboot
 - Automatic IP update every two days
-- It only works on Ubunut v22
+- Support Debian and Ubuntu
   
 **Install**
 ```
