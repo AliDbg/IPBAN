@@ -67,7 +67,6 @@ cd "\${workdir}"
 /usr/libexec/xtables-addons/xt_geoip_dl
 /usr/libexec/xtables-addons/xt_geoip_build -s
 cd && rm -rf "\${workdir}"
-chmod +x /usr/lib/xtables-addons/xt_geoip_build
 wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
 gzip -d "\${dbipcsv}" -q -f
 cd /usr/share/xt_geoip/
@@ -108,7 +107,7 @@ iptables_rules(){
 install_ipban(){
 	apt -y update && apt -y upgrade
 	apt -y install curl unzip gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent
-	mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
+	mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/ && chmod +x /usr/share/xt_geoip/
 	chmod +x /usr/lib/xtables-addons/xt_geoip_build
 	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl
 	modprobe x_tables && modprobe xt_geoip
