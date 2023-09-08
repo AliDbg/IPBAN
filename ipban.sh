@@ -65,6 +65,7 @@ cd "\${workdir}"
 /usr/libexec/xtables-addons/xt_geoip_dl
 /usr/libexec/xtables-addons/xt_geoip_build -s
 cd && rm -rf "\${workdir}"
+chmod +x /usr/lib/xtables-addons/xt_geoip_build
 wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
 gzip -d "\${dbipcsv}" -q -f
 cd /usr/share/xt_geoip/
