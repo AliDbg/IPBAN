@@ -71,11 +71,6 @@ gzip -d "\${dbipcsv}" -q -f
 cd /usr/share/xt_geoip/
 /usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
 cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
-sleep 1
-modprobe x_tables && modprobe xt_geoip
-lsmod | grep ^x_tables
-lsmod | grep ^xt_geoip
-sleep 1
 systemctl restart iptables.service ip6tables.service
 clear && echo "Updated IPBAN!" 
 EOF
@@ -115,6 +110,7 @@ install_ipban(){
 	mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	chmod +x /usr/lib/xtables-addons/xt_geoip_build
 	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl
+	modprobe x_tables && modprobe xt_geoip
 	create_update_sh
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "0 3 */2 * * /usr/share/ipban/ipban-update.sh") | crontab -
