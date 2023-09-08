@@ -30,15 +30,19 @@ success() {
 	echo -e "${Green}[+]${Font} $*"
 	exit 0
 }
+iptables_restart(){
+	service iptables restart && service ip6tables restart
+	systemctl restart netfilter-persistent.service
+	sleep 1
+}
+
 iptables_reset_rules(){
 	iptables -F && iptables -X && iptables -Z && ip6tables -F && ip6tables -X && ip6tables -Z 
 }
 
 iptables_save_restart(){
 	iptables-save > /etc/iptables/rules.v4 && ip6tables-save > /etc/iptables/rules.v6
-	sleep 1
-	systemctl restart iptables.service ip6tables.service
-	sleep 1
+	iptables_restart
 }
 
 iptables_restore_restart(){
@@ -72,7 +76,8 @@ gzip -d "\${dbipcsv}" -q -f
 cd /usr/share/xt_geoip/
 /usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
 cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
-systemctl restart iptables.service ip6tables.service
+service iptables restart && service ip6tables restart
+systemctl restart netfilter-persistent.service
 clear && echo "Updated IPBAN!" 
 EOF
 chmod +x "/usr/share/ipban/ipban-update.sh"
@@ -107,19 +112,19 @@ iptables_rules(){
 install_ipban(){
 	apt -y update && apt -y upgrade
 	apt -y install curl unzip gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent
-	mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/ && chmod +x /usr/share/xt_geoip/
+	mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	chmod +x /usr/lib/xtables-addons/xt_geoip_build
 	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl
 	modprobe x_tables && modprobe xt_geoip
+	iptables_restart
 	######################################################################
 	#iptables-save > /usr/share/ipban/old_rules.v4 && ip6tables-save > /usr/share/ipban/old_rules.v6
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "0 3 */2 * * /usr/share/ipban/ipban-update.sh") | crontab -
-	
 	create_update_sh && bash "/usr/share/ipban/ipban-update.sh"	
 	iptables_reset_rules
 	iptables_rules
-	systemctl enable netfilter-persistent.service && iptables_save_restart
+	iptables_save_restart
 	success "Installed IPBAN!"
 }
 
