@@ -66,7 +66,8 @@ cd "\${workdir}"
 /usr/libexec/xtables-addons/xt_geoip_build -s
 cd && rm -rf "\${workdir}"
 wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
-gzip -d "\${dbipcsv}" -q -f && cd /usr/share/xt_geoip/
+gzip -d "\${dbipcsv}" -q -f
+cd /usr/share/xt_geoip/
 /usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
 cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
 sleep 1
@@ -111,6 +112,7 @@ install_ipban(){
 	apt -y update && apt -y upgrade
 	apt -y install curl unzip gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent
 	mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
+	chmod +x /usr/lib/xtables-addons/xt_geoip_build
 	create_update_sh
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "0 3 */2 * * /usr/share/ipban/ipban-update.sh") | crontab -
