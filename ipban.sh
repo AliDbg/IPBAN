@@ -36,7 +36,9 @@ iptables_reset_rules(){
 
 iptables_save_restart(){
 	iptables-save > /etc/iptables/rules.v4 && ip6tables-save > /etc/iptables/rules.v6
+	sleep 1
 	systemctl restart iptables.service ip6tables.service
+	sleep 1
 }
 
 iptables_restore_restart(){
@@ -101,7 +103,6 @@ iptables_rules(){
 		iptables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 	fi
-	sleep 1
 }
 
 install_ipban(){
@@ -111,11 +112,12 @@ install_ipban(){
 	chmod +x /usr/lib/xtables-addons/xt_geoip_build
 	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl
 	modprobe x_tables && modprobe xt_geoip
-	create_update_sh
+	######################################################################
+	#iptables-save > /usr/share/ipban/old_rules.v4 && ip6tables-save > /usr/share/ipban/old_rules.v6
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "0 3 */2 * * /usr/share/ipban/ipban-update.sh") | crontab -
-	bash "/usr/share/ipban/ipban-update.sh"
-	#iptables-save > /usr/share/ipban/old_rules.v4 && ip6tables-save > /usr/share/ipban/old_rules.v6
+	
+	create_update_sh && bash "/usr/share/ipban/ipban-update.sh"	
 	iptables_reset_rules
 	iptables_rules
 	systemctl enable netfilter-persistent.service && iptables_save_restart
