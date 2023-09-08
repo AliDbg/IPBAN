@@ -113,9 +113,9 @@ install_ipban(){
 	apt -y update
 	apt -y install curl unzip gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent
 	mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
+	modprobe x_tables && modprobe xt_geoip
 	chmod +x /usr/lib/xtables-addons/xt_geoip_build
 	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl
-	modprobe x_tables && modprobe xt_geoip
 	iptables_restart
 	######################################################################
 	#iptables-save > /usr/share/ipban/old_rules.v4 && ip6tables-save > /usr/share/ipban/old_rules.v6
