@@ -45,16 +45,12 @@ iptables_save_restart(){
 	iptables_restart
 }
 
-iptables_restore_restart(){
-	iptables-restore < /usr/share/ipban/old_rules.v4 && ip6tables-restore < /usr/share/ipban/old_rules.v6 && 
-	systemctl restart iptables.service ip6tables.service
-}
-
 uninstall_ipban(){
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	systemctl stop netfilter-persistent.service && systemctl disable netfilter-persistent.service
 	iptables_reset_rules
-	iptables_save_restart
+	rm /etc/iptables/rules.v4 && rm /etc/iptables/rules.v6
+	iptables-save
 	rm -rf /usr/share/ipban/
 	success "Uninstalled IPBAN!"
 }
@@ -117,8 +113,6 @@ install_ipban(){
 	chmod +x /usr/lib/xtables-addons/xt_geoip_build
 	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl
 	iptables_restart
-	######################################################################
-	#iptables-save > /usr/share/ipban/old_rules.v4 && ip6tables-save > /usr/share/ipban/old_rules.v6
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "0 3 */2 * * /usr/share/ipban/ipban-update.sh") | crontab -
 	create_update_sh && bash "/usr/share/ipban/ipban-update.sh"	
