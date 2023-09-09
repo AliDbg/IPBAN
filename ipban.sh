@@ -69,15 +69,15 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 	mkdir -p /usr/share/xt_geoip/tmp/
 	mkdir -p /usr/share/xt_geoip/tmp/ip2loc/
 
-	wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
-	yes n | gzip -d "\${dbipcsv}" 
+	#wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
+	#gzip -f -d "\${dbipcsv}" -q
 
 	cd /usr/share/xt_geoip/tmp/
 	/usr/lib/xtables-addons/xt_geoip_dl
 
 	# Download legacy csv
 	wget "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz
-	yes n | gzip -d  "/usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz" -q -f
+	gzip -f -d  "/usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz" -q
 	cat /usr/share/xt_geoip/tmp/GeoIP-legacy.csv | tr -d '"' | cut -d, -f1,2,5 > /usr/share/xt_geoip/tmp/GeoIP-legacy-processed.csv
 	rm /usr/share/xt_geoip/tmp/GeoIP-legacy.csv
 	rm /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz
