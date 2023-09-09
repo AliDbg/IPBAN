@@ -8,7 +8,7 @@
 - Persistent settings after reboot
 - Automatic IP update every two days
 - Support Ubuntu Linux v20-22
->Upgrade and reboot your server! Then install ipban!
+>Upgrade and reboot your server! Then install ipban! (apt -y update && apt -y upgrade && sleep 3 && reboot)
   
 **Install**
 ```
