@@ -74,7 +74,7 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
  
 	# Download db-ip lite
 	wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
-	gzip -f -d "\${dbipcsv}" -q
+	gzip -d -q -f "\${dbipcsv}"
 
 	# Download legacy csv
 	wget "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz
