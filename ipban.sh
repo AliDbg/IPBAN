@@ -64,8 +64,7 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 	## Thanks to kibazen_cn
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	mkdir -p /usr/share/xt_geoip/tmp/
-	mkdir -p /usr/share/xt_geoip/tmp/ip2loc/
- 
+
 	# Download db-ip lite
 	MON=\$(date +"%m")
 	YR=\$(date +"%Y")
