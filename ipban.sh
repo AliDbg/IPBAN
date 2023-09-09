@@ -78,7 +78,7 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 
 	# Download legacy csv
 	wget "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz
-	gzip -f -d  "/usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz" -q
+	gzip -d -q -f "/usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz"
 	cat /usr/share/xt_geoip/tmp/GeoIP-legacy.csv | tr -d '"' | cut -d, -f1,2,5 > /usr/share/xt_geoip/tmp/GeoIP-legacy-processed.csv
 	rm /usr/share/xt_geoip/tmp/GeoIP-legacy.csv
 
