@@ -1,8 +1,8 @@
 ## IPBAN (Limiting IP countries with iptables+xt_geoip)
 
 - Restrict server input and output to IP countries.
-- Support TCP and UDP Protocols
-- Support IPv4 and IPv6
+- Full IP Range
+- Support IPv4-v6
 - Support Multi-Port
 - Support Multi-Country
 - Persistent settings after reboot
