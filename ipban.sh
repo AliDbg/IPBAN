@@ -97,7 +97,7 @@ cat > "/usr/share/ipban/ipban-update.sh" << EOF
 	/usr/share/ipban/download-build-dbip.sh
 	cd /usr/share/xt_geoip/
 	/usr/libexec/xtables-addons/xt_geoip_build -s
-	/usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/ *.csv
+	/usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
 	cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
 	service iptables restart && service ip6tables restart
 	systemctl restart netfilter-persistent.service
