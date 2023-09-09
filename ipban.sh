@@ -69,11 +69,12 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 	mkdir -p /usr/share/xt_geoip/tmp/
 	mkdir -p /usr/share/xt_geoip/tmp/ip2loc/
 
-	wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
-	gzip -f -d "\${dbipcsv}" -q
-
 	cd /usr/share/xt_geoip/tmp/
 	/usr/lib/xtables-addons/xt_geoip_dl
+ 
+	# Download db-ip lite
+	wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
+	gzip -f -d "\${dbipcsv}" -q
 
 	# Download legacy csv
 	wget "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz
