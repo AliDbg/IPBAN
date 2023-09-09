@@ -70,14 +70,14 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 	mkdir -p /usr/share/xt_geoip/tmp/ip2loc/
 
 	wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
-	gzip -d "\${dbipcsv}" -q -f
+	yes n | gzip -d "\${dbipcsv}" 
 
 	cd /usr/share/xt_geoip/tmp/
 	/usr/lib/xtables-addons/xt_geoip_dl
 
 	# Download legacy csv
 	wget "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz
-	gzip -d  /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz -q -f
+	yes n | gzip -d  "/usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz" -q -f
 	cat /usr/share/xt_geoip/tmp/GeoIP-legacy.csv | tr -d '"' | cut -d, -f1,2,5 > /usr/share/xt_geoip/tmp/GeoIP-legacy-processed.csv
 	rm /usr/share/xt_geoip/tmp/GeoIP-legacy.csv
 	rm /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz
@@ -108,7 +108,7 @@ cat > "/usr/share/ipban/ipban-update.sh" << EOF
 	/usr/share/ipban/download-build-dbip.sh
 	cd /usr/share/xt_geoip/
 	/usr/libexec/xtables-addons/xt_geoip_build -s
-	/usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
+	/usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/ *.csv
 	cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
 	service iptables restart && service ip6tables restart
 	systemctl restart netfilter-persistent.service
