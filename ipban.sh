@@ -69,8 +69,8 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 	mkdir -p /usr/share/xt_geoip/tmp/
 	mkdir -p /usr/share/xt_geoip/tmp/ip2loc/
 
-	#wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
-	#gzip -f -d "\${dbipcsv}" -q
+	wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
+	gzip -f -d "\${dbipcsv}" -q
 
 	cd /usr/share/xt_geoip/tmp/
 	/usr/lib/xtables-addons/xt_geoip_dl
@@ -80,17 +80,6 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 	gzip -f -d  "/usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz" -q
 	cat /usr/share/xt_geoip/tmp/GeoIP-legacy.csv | tr -d '"' | cut -d, -f1,2,5 > /usr/share/xt_geoip/tmp/GeoIP-legacy-processed.csv
 	rm /usr/share/xt_geoip/tmp/GeoIP-legacy.csv
-	rm /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz
-
-	# Download latest from https://github.com/sapics/ip-location-db
-	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/geo-whois-asn-country/geo-whois-asn-country-ipv4.csv
-	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/geo-whois-asn-country/geo-whois-asn-country-ipv6.csv
-	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/iptoasn-country/iptoasn-country-ipv4.csv
-	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/iptoasn-country/iptoasn-country-ipv6.csv
-	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/dbip-country/dbip-country-ipv4.csv
-	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/dbip-country/dbip-country-ipv6.csv
-	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/geolite2-country/geolite2-country-ipv4.csv
-	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/geolite2-country/geolite2-country-ipv6.csv
 
 	# Combine all csv and remove duplicates
 	cd /usr/share/xt_geoip/tmp/
