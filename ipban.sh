@@ -1,4 +1,5 @@
 #!/bin/bash
+# v1.1 github.com/AliDbg/IPBAN 
 IO="x"
 GEOIP="CN,IR,CU,VN,ZW,BY"
 LIMIT="x"
@@ -30,6 +31,7 @@ success() {
 	echo -e "${Green}[+]${Font} $*"
 	exit 0
 }
+
 iptables_restart(){
 	service iptables restart && service ip6tables restart
 	systemctl restart netfilter-persistent.service
@@ -55,26 +57,62 @@ uninstall_ipban(){
 	success "Uninstalled IPBAN!"
 }
 
+download_build_dbip (){
+mkdir -p /usr/share/ipban/ && chmod a+rwx /usr/share/ipban/
+cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
+#!/bin/bash
+	## Thanks to kibazen_cn
+	MON=\$(date +"%m")
+	YR=\$(date +"%Y")
+	dbipcsv="/usr/share/xt_geoip/tmp/dbip-country-lite.csv.gz"
+
+	mkdir -p /usr/share/xt_geoip/tmp/
+	mkdir -p /usr/share/xt_geoip/tmp/ip2loc/
+
+	wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
+	gzip -d "\${dbipcsv}" -q -f
+
+	cd /usr/share/xt_geoip/tmp/
+	/usr/lib/xtables-addons/xt_geoip_dl
+
+	# Download legacy csv
+	wget "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz
+	gzip -d  /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz -q -f
+	cat /usr/share/xt_geoip/tmp/GeoIP-legacy.csv | tr -d '"' | cut -d, -f1,2,5 > /usr/share/xt_geoip/tmp/GeoIP-legacy-processed.csv
+	rm /usr/share/xt_geoip/tmp/GeoIP-legacy.csv
+	rm /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz
+
+	# Download latest from https://github.com/sapics/ip-location-db
+	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/geo-whois-asn-country/geo-whois-asn-country-ipv4.csv
+	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/geo-whois-asn-country/geo-whois-asn-country-ipv6.csv
+	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/iptoasn-country/iptoasn-country-ipv4.csv
+	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/iptoasn-country/iptoasn-country-ipv6.csv
+	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/dbip-country/dbip-country-ipv4.csv
+	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/dbip-country/dbip-country-ipv6.csv
+	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/geolite2-country/geolite2-country-ipv4.csv
+	wget -P /usr/share/xt_geoip/tmp/ https://cdn.jsdelivr.net/npm/@ip-location-db/geolite2-country/geolite2-country-ipv6.csv
+
+	# Combine all csv and remove duplicates
+	cd /usr/share/xt_geoip/tmp/
+	cat *.csv > geoip.csv
+	sort -u geoip.csv -o /usr/share/xt_geoip/dbip-country-lite.csv
+	rm -rf /usr/share/xt_geoip/tmp/
+EOF
+chmod +x "/usr/share/ipban/download-build-dbip.sh"
+}
+
 create_update_sh(){
 mkdir -p /usr/share/ipban/ && chmod a+rwx /usr/share/ipban/
 cat > "/usr/share/ipban/ipban-update.sh" << EOF
 #!/bin/bash
-MON=\$(date +"%m")
-YR=\$(date +"%Y")
-dbipcsv="/usr/share/xt_geoip/dbip-country-lite.csv.gz"
-workdir=\$(mktemp -d)
-cd "\${workdir}"
-/usr/libexec/xtables-addons/xt_geoip_dl
-/usr/libexec/xtables-addons/xt_geoip_build -s
-cd && rm -rf "\${workdir}"
-wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
-gzip -d "\${dbipcsv}" -q -f
-cd /usr/share/xt_geoip/
-/usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
-cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
-service iptables restart && service ip6tables restart
-systemctl restart netfilter-persistent.service
-clear && echo "Updated IPBAN!" 
+	/usr/share/ipban/download-build-dbip.sh
+	cd /usr/share/xt_geoip/
+	/usr/libexec/xtables-addons/xt_geoip_build -s
+	/usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
+	cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
+	service iptables restart && service ip6tables restart
+	systemctl restart netfilter-persistent.service
+	clear && echo "Updated IPBAN!" 
 EOF
 chmod +x "/usr/share/ipban/ipban-update.sh"
 }
@@ -115,6 +153,7 @@ install_ipban(){
 	iptables_restart
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "0 3 */2 * * /usr/share/ipban/ipban-update.sh") | crontab -
+	download_build_dbip
 	create_update_sh && bash "/usr/share/ipban/ipban-update.sh"	
 	iptables_reset_rules
 	iptables_rules
