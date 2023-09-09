@@ -1,10 +1,10 @@
 ## IPBAN (Limiting IP countries with iptables+xt_geoip)
 
-- Restrict server input and output to IP countries.
 - Full IP Range
 - Support IPv4-v6
 - Support Multi-Port
 - Support Multi-Country
+- Support INPUT/OUTPUT Server
 - Persistent settings after reboot
 - Automatic IP update every two days
 - Support Ubuntu Linux v20-22
