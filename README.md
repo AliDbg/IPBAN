@@ -1,4 +1,4 @@
-## IPBAN (Limiting IP countries with iptables)
+## IPBAN (Limiting IP countries with iptables+xt_geoip)
 
 - Restrict server input and output to IP countries.
 - Support TCP and UDP Protocols
