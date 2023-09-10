@@ -74,7 +74,7 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 	# Download legacy csv
 	wget "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz &> /dev/null
 	if [[ "\$?" != 0 ]]; then
-		wget -q https://legacy-geoip-csv.ufficyo.com/Legacy-MaxMind-GeoIP-database.tar.gz -O - | tar -xvzf - -C /usr/share/xt_geoip/tmp/
+		wget -q "https://legacy-geoip-csv.ufficyo.com/Legacy-MaxMind-GeoIP-database.tar.gz" -O - | tar -xvzf - -C /usr/share/xt_geoip/tmp/
 	else
 		gzip -d -q -f "/usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz"
 	fi
