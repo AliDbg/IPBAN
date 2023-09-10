@@ -8,6 +8,7 @@
 - Persistent settings after reboot
 - Automatic IP update every two days
 - Support Ubuntu Linux v20-22
+## 
 >Upgrade and reboot your server! ```apt update && apt -y upgrade && sleep 3 && reboot```
   
 **Install**
@@ -30,7 +31,8 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -
 ```
 bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -remove yes
 ```
-**Arguments**
+## 
+#### Arguments
 >
 > **-io** **INPUT** or **OUTPUT** or **FORWARD**
 >
@@ -41,7 +43,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -
 > **-noicmp yes** (Disable ICMP Protocol for deny ping)
 
 
-## Tools
+#### Tools
 > SSH Client: https://github.com/nirui/sshwifty https://sshwifty-demo.nirui.org/
 >
 > Checker: https://check-host.net
