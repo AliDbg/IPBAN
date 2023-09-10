@@ -1,5 +1,5 @@
 #!/bin/bash
-# v1.2 github.com/AliDbg/IPBAN 
+# v1.1 github.com/AliDbg/IPBAN 
 IO="x"
 GEOIP="CN,IR,CU,VN,ZW,BY"
 LIMIT="x"
@@ -66,7 +66,7 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 	rm -rf /usr/share/xt_geoip/tmp/ && mkdir -p /usr/share/xt_geoip/tmp/
 	
 	# Download db-ip lite
-	timestamp=$(date "+%Y-%m")
+	timestamp=\$(date "+%Y-%m")
 	dbipcsv="/usr/share/xt_geoip/tmp/dbip-country-lite.csv.gz"
 	wget "https://download.db-ip.com/free/dbip-country-lite-\${timestamp}.csv.gz" -O "\${dbipcsv}"
 	gzip -d -q -f "\${dbipcsv}"
