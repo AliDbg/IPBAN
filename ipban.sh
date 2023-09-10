@@ -1,5 +1,5 @@
 #!/bin/bash
-# v1.1 github.com/AliDbg/IPBAN 
+# v1.2 github.com/AliDbg/IPBAN 
 IO="x"
 GEOIP="CN,IR,CU,VN,ZW,BY"
 LIMIT="x"
