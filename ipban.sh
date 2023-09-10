@@ -8,7 +8,7 @@
 #bash ./ipban.sh -remove yes
 ##################################
 #
-#
+#var
 IO="x"
 GEOIP="CN,IR,CU,VN,ZW,BY"
 LIMIT="x"
@@ -17,7 +17,35 @@ RESET="n"
 REMOVE="n"
 ADD="n"
 NOICMP="x"
+release=""
+systemPackage=""
+CHECK_OS(){
+	[[ $EUID -ne 0 ]] && echo "not root!" && exit 0
+	if [[ -f /etc/redhat-release ]];then
+		release="centos"
+		systemPackage="yum"
+	elif cat /etc/issue | grep -q -E -i "debian";then
+		release="debian"
+		systemPackage="apt"
+	elif cat /etc/issue | grep -q -E -i "ubuntu";then
+		release="ubuntu"
+		systemPackage="apt"
+	elif cat /etc/issue | grep -q -E -i "centos|red hat|redhat";then
+		release="centos"
+		systemPackage="yum"
+	elif cat /proc/version | grep -q -E -i "debian";then
+		release="debian"
+		systemPackage="apt"
+	elif cat /proc/version | grep -q -E -i "ubuntu";then
+		release="ubuntu"
+		systemPackage="apt"
+	elif cat /proc/version | grep -q -E -i "centos|red hat|redhat";then
+		release="centos"
+		 systemPackage="yum"
+	fi
+}
 
+# get arguments
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -add) ADD="$2"; shift 2;;
@@ -142,11 +170,14 @@ iptables_rules(){
 }
 
 install_ipban(){
-	apt -y update
-	apt -y install curl unzip gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent
-	apt -y install libnet-cidr-lite-perl module-assistant xtables-addons-source
-	module-assistant prepare
-	module-assistant -f -q auto-install xtables-addons-source
+	CHECK_OS
+	$systemPackage -y update
+	$systemPackage -y install curl unzip gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl libnet-cidr-lite-perl iptables-persistent
+	if [[ "${release}" == "debian" ]]; then
+		$systemPackage -y install module-assistant xtables-addons-source
+		module-assistant prepare
+		module-assistant -f auto-install xtables-addons-source
+	fi	
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	modprobe x_tables && modprobe xt_geoip
 	chmod +x /usr/lib/xtables-addons/xt_geoip_build
