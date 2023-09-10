@@ -144,6 +144,9 @@ iptables_rules(){
 install_ipban(){
 	apt -y update
 	apt -y install curl unzip gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl libnet-cidr-lite-perl iptables-persistent
+	apt -y module-assistant xtables-addons-source
+	module-assistant prepare
+	module-assistant -f -q auto-install xtables-addons-source
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	modprobe x_tables && modprobe xt_geoip
 	chmod +x /usr/lib/xtables-addons/xt_geoip_build
