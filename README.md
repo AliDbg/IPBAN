@@ -47,8 +47,3 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -
 > SSH Client: https://github.com/nirui/sshwifty https://sshwifty-demo.nirui.org/
 >
 > Checker: https://check-host.net
-
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=AliDbg/IPBAN&type=Date)](https://star-history.com/#AliDbg/IPBAN&Date)
