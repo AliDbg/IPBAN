@@ -66,20 +66,24 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 	mkdir -p /usr/share/xt_geoip/tmp/
 
 	# Download db-ip lite
-	MON=\$(date +"%m")
-	YR=\$(date +"%Y")
+	timestamp=$(date "+%Y-%m")
 	dbipcsv="/usr/share/xt_geoip/tmp/dbip-country-lite.csv.gz"
-	wget "https://download.db-ip.com/free/dbip-country-lite-\${YR}-\${MON}.csv.gz" -O "\${dbipcsv}"
+	wget "https://download.db-ip.com/free/dbip-country-lite-\${timestamp}.csv.gz" -O "\${dbipcsv}"
 	gzip -d -q -f "\${dbipcsv}"
 
 	# Download legacy csv
-	wget "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz
-	gzip -d -q -f "/usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz"
+	wget "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz &> /dev/null
+	if [[ "$?" != 0 ]]; then
+		wget -q https://legacy-geoip-csv.ufficyo.com/Legacy-MaxMind-GeoIP-database.tar.gz -O - | tar -xvzf - -C /usr/share/xt_geoip/tmp/
+	else
+		gzip -d -q -f "/usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz"
+	fi
+	
 	cat /usr/share/xt_geoip/tmp/GeoIP-legacy.csv | tr -d '"' | cut -d, -f1,2,5 > /usr/share/xt_geoip/tmp/GeoIP-legacy-processed.csv
 	rm /usr/share/xt_geoip/tmp/GeoIP-legacy.csv
 
 	# Combine all csv and remove duplicates
-	cd /usr/share/xt_geoip/tmp/
+	cd /usr/share/xt_geoip/tmp/ && rm -rf LE BE
 	cat *.csv > geoip.csv
 	sort -u geoip.csv -o /usr/share/xt_geoip/dbip-country-lite.csv
 	rm -rf /usr/share/xt_geoip/tmp/
