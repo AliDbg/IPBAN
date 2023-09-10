@@ -9,7 +9,7 @@
 - Automatic IP update every two days
 - Support Debian v10-12, Ubuntu v20-22
 ## 
->Upgrade and reboot your server>>> ```apt update && apt -y upgrade && sleep 3 && reboot```
+>Upgrade and reboot your server>> ```apt update && apt -y upgrade && sleep 3 && reboot```
   
 **Install**
 ```
