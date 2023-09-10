@@ -47,4 +47,6 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -
 > Checker: https://check-host.net
 
 
-[![Stargazers over time](https://starchart.cc/AliDbg/IPBAN.svg)](https://starchart.cc/AliDbg/IPBAN)
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=AliDbg/IPBAN&type=Date)](https://star-history.com/#AliDbg/IPBAN&Date)
