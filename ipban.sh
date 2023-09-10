@@ -172,7 +172,7 @@ iptables_rules(){
 install_ipban(){
 	CHECK_OS
 	$systemPackage -y update
-	$systemPackage -y install curl unzip gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl libnet-cidr-lite-perl iptables-persistent
+	$systemPackage -y install curl unzip gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent libnet-cidr-lite-perl
 	if [[ "${release}" == "debian" ]]; then
 		$systemPackage -y install module-assistant xtables-addons-source
 		module-assistant prepare
