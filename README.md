@@ -44,6 +44,6 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -
 
 
 #### Tools
-> SSH Client: https://github.com/nirui/sshwifty https://sshwifty-demo.nirui.org/
+> SSH Client: https://github.com/nirui/sshwifty
 >
 > Checker: https://check-host.net
