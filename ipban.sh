@@ -99,7 +99,7 @@ mkdir -p /usr/share/ipban/ && chmod a+rwx /usr/share/ipban/
 cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 #!/bin/bash
 	## Thanks to kibazen_cn
-	rm -rf /usr/share/xt_geoip/tmp/ && mkdir -p /usr/share/xt_geoip/tmp/ && chmod a+rwx /usr/share/xt_geoip/tmp
+	rm -rf /usr/share/xt_geoip/tmp/ && mkdir -p /usr/share/xt_geoip/tmp/ && chmod a+rwx /usr/share/xt_geoip/tmp/
 	
  	# Download db-ip lite
 	timestamp=\$(date "+%Y-%m")
