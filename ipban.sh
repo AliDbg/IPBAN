@@ -1,5 +1,5 @@
 #!/bin/bash
-# v1.3 github.com/AliDbg/IPBAN 
+# v1.3.1 github.com/AliDbg/IPBAN 
 # Linux Debian11-12 - Ubuntu20-22
 #################################
 #bash ./ipban.sh -install yes -io OUTPUT -geoip CN,IR,CU,VN -limit DROP -noicmp yes
@@ -99,10 +99,9 @@ mkdir -p /usr/share/ipban/ && chmod a+rwx /usr/share/ipban/
 cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 #!/bin/bash
 	## Thanks to kibazen_cn
-	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
-	rm -rf /usr/share/xt_geoip/tmp/ && mkdir -p /usr/share/xt_geoip/tmp/
+	rm -rf /usr/share/xt_geoip/tmp/ && mkdir -p /usr/share/xt_geoip/tmp/ && chmod a+rwx /usr/share/xt_geoip/tmp
 	
-	# Download db-ip lite
+ 	# Download db-ip lite
 	timestamp=\$(date "+%Y-%m")
 	dbipcsv="/usr/share/xt_geoip/tmp/dbip-country-lite.csv.gz"
 	wget "https://download.db-ip.com/free/dbip-country-lite-\${timestamp}.csv.gz" -O "\${dbipcsv}"
