@@ -77,6 +77,10 @@ iptables_restart(){
 
 iptables_reset_rules(){
 	iptables -F && iptables -X && iptables -Z && ip6tables -F && ip6tables -X && ip6tables -Z 
+	iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+	iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+	ip6tables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+	ip6tables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 }
 
 iptables_save_restart(){
@@ -144,10 +148,6 @@ chmod +x "/usr/share/ipban/ipban-update.sh"
 
 
 iptables_rules(){
-
-  iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-  iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-
 	if [[ ${NOICMP} == *"y"* ]]; then
 		iptables -A INPUT -p icmp -j DROP
 		ip6tables -A INPUT -p icmp -j DROP
