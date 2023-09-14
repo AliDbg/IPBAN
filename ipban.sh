@@ -1,5 +1,5 @@
 #!/bin/bash
-# v1.3.3 github.com/AliDbg/IPBAN 
+# v1.3.2 github.com/AliDbg/IPBAN 
 # Linux Debian11-12 - Ubuntu20-22
 #################################
 #bash ./ipban.sh -install yes -io OUTPUT -geoip CN,IR,CU,VN -limit DROP -noicmp yes
@@ -19,7 +19,6 @@ ADD="n"
 NOICMP="x"
 release=""
 systemPackage=""
-SSHPORT=22
 CHECK_OS(){
 	[[ $EUID -ne 0 ]] && echo "not root!" && exit 0
 	if [[ -f /etc/redhat-release ]];then
@@ -53,7 +52,6 @@ while [ "$#" -gt 0 ]; do
     -reset) RESET="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
     -install) INSTALL="$2"; shift 2;;
-    -sshport) SSHPORT="$2"; shift 2;;
 	-noicmp) NOICMP="$2"; shift 2;;
     -geoip) GEOIP="$2"; shift 2;;
     -limit) LIMIT="$2"; shift 2;;
@@ -147,9 +145,6 @@ chmod +x "/usr/share/ipban/ipban-update.sh"
 
 iptables_rules(){
 
-	iptables -A OUTPUT -p tcp --sport "${SSHPORT}" -m state --state ESTABLISHED -j ACCEPT
-	ip6tables -A OUTPUT -p tcp --sport "${SSHPORT}" -m state --state ESTABLISHED -j ACCEPT
-	
 	if [[ ${NOICMP} == *"y"* ]]; then
 		iptables -A INPUT -p icmp -j DROP
 		ip6tables -A INPUT -p icmp -j DROP
@@ -161,8 +156,10 @@ iptables_rules(){
 	fi
 	
 	if [[ ${IO} == *"O"* ]]; then
-		iptables  -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
-		ip6tables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"		
+		iptables  -A OUTPUT -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
+		ip6tables -A OUTPUT -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
+		iptables  -A OUTPUT -m geoip -p udp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
+		ip6tables -A OUTPUT -m geoip -p udp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"		
 	fi
 		
 	if [[ ${IO} == *"F"* ]]; then
