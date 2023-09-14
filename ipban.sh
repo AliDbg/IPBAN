@@ -1,5 +1,5 @@
 #!/bin/bash
-# v1.3.1 github.com/AliDbg/IPBAN 
+# v1.3.2 github.com/AliDbg/IPBAN 
 # Linux Debian11-12 - Ubuntu20-22
 #################################
 #bash ./ipban.sh -install yes -io OUTPUT -geoip CN,IR,CU,VN -limit DROP -noicmp yes
@@ -156,10 +156,10 @@ iptables_rules(){
 	fi
 	
 	if [[ ${IO} == *"O"* ]]; then
-		iptables  -A OUTPUT -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
-		ip6tables -A OUTPUT -m geoip -p tcp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
-		iptables  -A OUTPUT -m geoip -p udp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"
-		ip6tables -A OUTPUT -m geoip -p udp -m multiport --dports 0:9999 --dst-cc "${GEOIP}" -j "${LIMIT}"		
+		iptables  -A OUTPUT -m geoip -p tcp -m multiport --dports 0:65535 --dst-cc "${GEOIP}" -j "${LIMIT}"
+		ip6tables -A OUTPUT -m geoip -p tcp -m multiport --dports 0:65535 --dst-cc "${GEOIP}" -j "${LIMIT}"
+		iptables  -A OUTPUT -m geoip -p udp -m multiport --dports 0:65535 --dst-cc "${GEOIP}" -j "${LIMIT}"
+		ip6tables -A OUTPUT -m geoip -p udp -m multiport --dports 0:65535 --dst-cc "${GEOIP}" -j "${LIMIT}"		
 	fi
 		
 	if [[ ${IO} == *"F"* ]]; then
