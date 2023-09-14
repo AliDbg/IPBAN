@@ -1,5 +1,5 @@
 #!/bin/bash
-# v1.3.2 github.com/AliDbg/IPBAN 
+# v1.3.3 github.com/AliDbg/IPBAN 
 # Linux Debian11-12 - Ubuntu20-22
 #################################
 #bash ./ipban.sh -install yes -io OUTPUT -geoip CN,IR,CU,VN -limit DROP -noicmp yes
