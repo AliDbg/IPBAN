@@ -2,8 +2,8 @@
 
 - Full IP Range
 - Support IPv4-v6
-- Support Multi-Port
 - Support Multi-Country
+- Support all protocols and ports
 - Support INPUT/OUTPUT Server
 - Persistent settings after reboot
 - Automatic IP update every two days
