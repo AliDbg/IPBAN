@@ -108,13 +108,13 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
  	# Download db-ip lite
 	timestamp=\$(date "+%Y-%m")
 	dbipcsv="/usr/share/xt_geoip/tmp/dbip-country-lite.csv.gz"
-	wget "https://download.db-ip.com/free/dbip-country-lite-\${timestamp}.csv.gz" -O "\${dbipcsv}"
+	wget -T 9 "https://download.db-ip.com/free/dbip-country-lite-\${timestamp}.csv.gz" -O "\${dbipcsv}"
 	gzip -d -q -f "\${dbipcsv}"
 
 	# Download legacy csv
-	wget "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz &> /dev/null
+	wget -T 9 "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz &> /dev/null
 	if [[ "\$?" != 0 ]]; then
-		wget -q "https://legacy-geoip-csv.ufficyo.com/Legacy-MaxMind-GeoIP-database.tar.gz" -O - | tar -xvzf - -C /usr/share/xt_geoip/tmp/
+		wget -T 9 -q "https://legacy-geoip-csv.ufficyo.com/Legacy-MaxMind-GeoIP-database.tar.gz" -O - | tar -xvzf - -C /usr/share/xt_geoip/tmp/
 	else
 		gzip -d -q -f "/usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz"
 	fi
@@ -188,6 +188,7 @@ install_ipban(){
 	download_build_dbip
 	create_update_sh && bash "/usr/share/ipban/ipban-update.sh"	
 	iptables_reset_rules
+ 	ufw disable
 	iptables_rules
 	systemctl enable netfilter-persistent.service
 	iptables_save_restart
