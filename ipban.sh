@@ -108,13 +108,13 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
  	# Download db-ip lite
 	timestamp=\$(date "+%Y-%m")
 	dbipcsv="/usr/share/xt_geoip/tmp/dbip-country-lite.csv.gz"
-	wget -T 9 "https://download.db-ip.com/free/dbip-country-lite-\${timestamp}.csv.gz" -O "\${dbipcsv}"
+	wget -t 9 -T 9 -w 9 "https://download.db-ip.com/free/dbip-country-lite-\${timestamp}.csv.gz" -O "\${dbipcsv}"
 	gzip -d -q -f "\${dbipcsv}"
 
 	# Download legacy csv
-	wget -T 9 "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz &> /dev/null
+	wget -t 9 -T 9 -w 9 "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz &> /dev/null
 	if [[ "\$?" != 0 ]]; then
-		wget -T 9 -q "https://legacy-geoip-csv.ufficyo.com/Legacy-MaxMind-GeoIP-database.tar.gz" -O - | tar -xvzf - -C /usr/share/xt_geoip/tmp/
+		wget -t 9 -T 9 -w 9 -q "https://legacy-geoip-csv.ufficyo.com/Legacy-MaxMind-GeoIP-database.tar.gz" -O - | tar -xvzf - -C /usr/share/xt_geoip/tmp/
 	else
 		gzip -d -q -f "/usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz"
 	fi
