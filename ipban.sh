@@ -189,6 +189,7 @@ install_ipban(){
 	create_update_sh && bash "/usr/share/ipban/ipban-update.sh"	
 	iptables_reset_rules
  	ufw disable
+  	systemctl enable cron
 	iptables_rules
 	systemctl enable netfilter-persistent.service
 	iptables_save_restart
