@@ -183,13 +183,13 @@ install_ipban(){
 	chmod +x /usr/lib/xtables-addons/xt_geoip_build
 	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl
 	iptables_restart
+   	systemctl enable cron
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "0 3 */2 * * /usr/share/ipban/ipban-update.sh") | crontab -
 	download_build_dbip
 	create_update_sh && bash "/usr/share/ipban/ipban-update.sh"	
 	iptables_reset_rules
  	ufw disable
-  	systemctl enable cron
 	iptables_rules
 	systemctl enable netfilter-persistent.service
 	iptables_save_restart
