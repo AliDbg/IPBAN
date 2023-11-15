@@ -1,50 +1,22 @@
 #!/bin/bash
-# v1.3.5 github.com/AliDbg/IPBAN 
-# Linux Debian11-12 - Ubuntu20-22
-#################################
+# v2.0 github.com/AliDbg/IPBAN ######### Linux Debian11-12 - Ubuntu20-22
 #bash ./ipban.sh -install yes -io OUTPUT -geoip CN,IR,CU,VN -limit DROP -noicmp yes
 #bash ./ipban.sh -add yes -io INPUT -geoip CN -limit DROP
 #bash ./ipban.sh -reset yes
 #bash ./ipban.sh -remove yes
-##################################
-#
-#var
-IO="x"
-GEOIP="CN,IR,CU,VN,ZW,BY"
-LIMIT="x"
-INSTALL="n"
-RESET="n"
-REMOVE="n"
-ADD="n"
-NOICMP="x"
-release=""
-systemPackage=""
+##################################################################
+GEOIP="CN,IR,CU,VN,ZW,BY";IO="x";LIMIT="x";INSTALL="n";RESET="n";REMOVE="n";ADD="n";NOICMP="x";release="";Src=""
 CHECK_OS(){
-	[[ $EUID -ne 0 ]] && echo "not root!" && exit 0
-	if [[ -f /etc/redhat-release ]];then
-		release="centos"
-		systemPackage="yum"
-	elif cat /etc/issue | grep -q -E -i "debian";then
-		release="debian"
-		systemPackage="apt"
-	elif cat /etc/issue | grep -q -E -i "ubuntu";then
-		release="ubuntu"
-		systemPackage="apt"
-	elif cat /etc/issue | grep -q -E -i "centos|red hat|redhat";then
-		release="centos"
-		systemPackage="yum"
-	elif cat /proc/version | grep -q -E -i "debian";then
-		release="debian"
-		systemPackage="apt"
-	elif cat /proc/version | grep -q -E -i "ubuntu";then
-		release="ubuntu"
-		systemPackage="apt"
-	elif cat /proc/version | grep -q -E -i "centos|red hat|redhat";then
-		release="centos"
-		 systemPackage="yum"
+	[[ $EUID -ne 0 ]] && echo "Run as root!" && exit 1
+	if [[ -f /etc/redhat-release ]]; then Src="yum";release="centos";
+	elif grep -Eqi "debian" /etc/issue; then Src="apt";release="debian";
+	elif grep -Eqi "ubuntu" /etc/issue; then Src="apt";release="ubuntu";
+	elif grep -Eqi "centos|red hat|redhat" /etc/issue; then Src="yum";release="centos";
+	elif grep -Eqi "debian|raspbian" /proc/version; then Src="apt";release="debian";
+	elif grep -Eqi "ubuntu" /proc/version; then Src="apt";release="ubuntu";
+	elif grep -Eqi "centos|red hat|redhat" /proc/version; then Src="yum";release="centos";
 	fi
 }
-
 # get arguments
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -68,13 +40,11 @@ success() {
 	echo -e "${Green}[+]${Font} $*"
 	exit 0
 }
-
 iptables_restart(){
 	service iptables restart && service ip6tables restart
 	systemctl restart netfilter-persistent.service
 	sleep 1
 }
-
 iptables_reset_rules(){
 	iptables -F && iptables -X && iptables -Z && ip6tables -F && ip6tables -X && ip6tables -Z 
 	iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
@@ -82,12 +52,10 @@ iptables_reset_rules(){
 	ip6tables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 	ip6tables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 }
-
 iptables_save_restart(){
 	iptables-save > /etc/iptables/rules.v4 && ip6tables-save > /etc/iptables/rules.v6
 	iptables_restart
 }
-
 uninstall_ipban(){
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	systemctl stop netfilter-persistent.service && systemctl disable netfilter-persistent.service
@@ -99,35 +67,29 @@ uninstall_ipban(){
 }
 
 download_build_dbip (){
-mkdir -p /usr/share/ipban/ && chmod a+rwx /usr/share/ipban/
+	mkdir -p /usr/share/ipban/ && chmod a+rwx /usr/share/ipban/
 cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 #!/bin/bash
-	## Thanks to kibazen_cn
-	rm -rf /usr/share/xt_geoip/tmp/ && mkdir -p /usr/share/xt_geoip/tmp/ && chmod a+rwx /usr/share/xt_geoip/tmp/
-	
- 	# Download db-ip lite
+	dtmp="/usr/share/xt_geoip/tmp/"
+	rm -rf "\${dtmp}" && mkdir -p "\${dtmp}" && cd "\${dtmp}"
+	# Download dbipLite Full
 	timestamp=\$(date "+%Y-%m")
-	dbipcsv="/usr/share/xt_geoip/tmp/dbip-country-lite.csv.gz"
-	wget -t 9 -T 9 -w 9 "https://download.db-ip.com/free/dbip-country-lite-\${timestamp}.csv.gz" -O "\${dbipcsv}"
-	gzip -d -q -f "\${dbipcsv}"
-
-	# Download legacy csv
-	wget -t 9 -T 9 -w 9 "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O /usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz &> /dev/null
+	curl -m 9 -fLO "https://download.db-ip.com/free/dbip-country-lite-\${timestamp}.csv.gz" &> /dev/null
+	curl -m 9 -fLO "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O &> /dev/null
 	if [[ "\$?" != 0 ]]; then
-		wget -t 9 -T 9 -w 9 -q "https://legacy-geoip-csv.ufficyo.com/Legacy-MaxMind-GeoIP-database.tar.gz" -O - | tar -xvzf - -C /usr/share/xt_geoip/tmp/
-	else
-		gzip -d -q -f "/usr/share/xt_geoip/tmp/GeoIP-legacy.csv.gz"
-	fi
-	
-	cat /usr/share/xt_geoip/tmp/GeoIP-legacy.csv | tr -d '"' | cut -d, -f1,2,5 > /usr/share/xt_geoip/tmp/GeoIP-legacy-processed.csv
-	rm /usr/share/xt_geoip/tmp/GeoIP-legacy.csv
-
+	curl -m 9 -fLO "https://legacy-geoip-csv.ufficyo.com/Legacy-MaxMind-GeoIP-database.tar.gz" &> /dev/null
+	fi		
 	# Combine all csv and remove duplicates 
-	cd /usr/share/xt_geoip/tmp/ && cat *.csv > geoip.csv 
-	sort -u geoip.csv -o /usr/share/xt_geoip/dbip-country-lite.csv
-	rm -rf /usr/share/xt_geoip/tmp/
+	gzip -dfq *.gz
+	find . -name "*.tar" -exec tar xvf {} \;
+	find . -name "*.tar.gz" -exec tar xvzf {} \;
+	cat "\${dtmp}GeoIP-legacy.csv" | tr -d '"' | cut -d, -f1,2,5 > "\${dtmp}GeoIP-legacy-processed.csv"
+	rm "\${dtmp}GeoIP-legacy.csv"
+	cat *.csv > geoip.csv 
+	sort -u geoip.csv -o "/usr/share/xt_geoip/dbip-country-lite.csv"
+	rm -rf "\${dtmp}"
 EOF
-chmod +x "/usr/share/ipban/download-build-dbip.sh"
+	chmod +x "/usr/share/ipban/download-build-dbip.sh"
 }
 
 create_update_sh(){
@@ -145,7 +107,6 @@ cat > "/usr/share/ipban/ipban-update.sh" << EOF
 EOF
 chmod +x "/usr/share/ipban/ipban-update.sh"
 }
-
 
 iptables_rules(){
 	if [[ ${NOICMP} == *"y"* ]]; then
@@ -171,10 +132,10 @@ iptables_rules(){
 
 install_ipban(){
 	CHECK_OS
-	$systemPackage -y update
-	$systemPackage -y install curl unzip gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent libnet-cidr-lite-perl
+	$Src -y update
+	$Src -y install curl gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent libnet-cidr-lite-perl
 	if [[ "${release}" == "debian" ]]; then
-		$systemPackage -y install module-assistant xtables-addons-source
+		$Src -y install module-assistant xtables-addons-source
 		module-assistant prepare
 		module-assistant -f auto-install xtables-addons-source
 	fi	
@@ -183,43 +144,29 @@ install_ipban(){
 	chmod +x /usr/lib/xtables-addons/xt_geoip_build
 	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl
 	iptables_restart
-   	systemctl enable cron
+	systemctl enable cron && ufw disable
 	crontab -l | grep -v "ipban-update.sh" | crontab -
-	(crontab -l 2>/dev/null; echo "0 3 */2 * * /usr/share/ipban/ipban-update.sh") | crontab -
+	(crontab -l 2>/dev/null; echo "$(shuf -i 1-59 -n 1) $(shuf -i 1-23 -n 1) * * * bash /usr/share/ipban/ipban-update.sh >/dev/null 2>&1") | crontab -
 	download_build_dbip
 	create_update_sh && bash "/usr/share/ipban/ipban-update.sh"	
 	iptables_reset_rules
- 	ufw disable
 	iptables_rules
 	systemctl enable netfilter-persistent.service
 	iptables_save_restart
 	success "Installed IPBAN!"
 }
-
 add_ipban(){
 	iptables_rules
 	iptables_save_restart
 	success "Added Rules!"
 }
-
 reset_iptables(){
 	iptables_reset_rules
 	iptables_save_restart
 	success "Resetted IPTABLES!"
 }
-
-if [[ ${RESET} == *"y"* ]]; then
-	reset_iptables
-fi
-
-if [[ ${ADD} == *"y"* ]]; then
-	add_ipban
-fi
-
-if [[ ${REMOVE} == *"y"* ]]; then
-	uninstall_ipban
-fi
-
-if [[ ${INSTALL} == *"y"* ]]; then
-	install_ipban
-fi
+if [[ ${RESET} == *"y"* ]]; then reset_iptables; fi
+if [[ ${ADD} == *"y"* ]]; then add_ipban; fi
+if [[ ${REMOVE} == *"y"* ]]; then uninstall_ipban; fi
+if [[ ${INSTALL} == *"y"* ]]; then install_ipban; fi
+#### END.
