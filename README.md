@@ -9,7 +9,9 @@
 - Automatic IP update every day
 - Support Debian v11-12, Ubuntu v20-22
 ## 
->Upgrade and reboot your server>> ```apt update && apt -y upgrade && sleep 3 && reboot```
+> ```apt update && apt upgrade -y && reboot```
+> 
+> ```iptables-save > backup-rules.txt```
   
 **Install**
 ```
