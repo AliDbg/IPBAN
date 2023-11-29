@@ -4,7 +4,7 @@
 #bash ./ipban.sh -add yes -io INPUT -geoip CN -limit DROP
 #bash ./ipban.sh -reset yes
 #bash ./ipban.sh -remove yes
-##################################################################
+#################################################################
 GREEN="\e[32m"
 CYAN="\e[36m"
 ENDCOLOR="\e[0m"
