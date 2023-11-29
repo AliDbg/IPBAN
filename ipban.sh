@@ -19,7 +19,6 @@ echo ".           IPBAN v2.0.0            ."
 echo -e ".....................................${ENDCOLOR}"
 echo ""
 echo ""
-echo -n -e "${CYAN}Please Enter Your SSH Port: ${ENDCOLOR}" && read SSHPORT
 
 GEOIP="CN,IR,CU,VN,ZW,BY";IO="x";LIMIT="x";INSTALL="n";RESET="n";REMOVE="n";ADD="n";NOICMP="x";release="";Src=""
 CHECK_OS(){
@@ -125,6 +124,7 @@ chmod +x "/usr/share/ipban/ipban-update.sh"
 }
 
 iptables_rules(){
+	echo -n -e "${CYAN}Please Enter Your SSH Port: ${ENDCOLOR}" && read SSHPORT
 	if [[ ${NOICMP} == *"y"* ]]; then
 		iptables -A INPUT -p icmp -j DROP
 		ip6tables -A INPUT -p icmp -j DROP
