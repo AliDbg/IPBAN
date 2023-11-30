@@ -5,6 +5,21 @@
 #bash ./ipban.sh -reset yes
 #bash ./ipban.sh -remove yes
 ##################################################################
+GREEN="\e[32m"
+CYAN="\e[36m"
+ENDCOLOR="\e[0m"
+echo -e "${GREEN}....................................."
+echo ".      _    _ _ ____  _             ."
+echo ".     / \  | (_)  _ \| |__   __ _   ."
+echo ".    / _ \ | | | | | | '_ \ / _\ |  ."
+echo ".   / ___ \| | | |_| | |_) | (_| |  ."
+echo ".  /_/   \_\_|_|____/|_.__/ \__, |  ."
+echo ".                           |___/   ."
+echo ".           IPBAN v2.0.0            ."
+echo -e ".....................................${ENDCOLOR}"
+echo ""
+echo ""
+
 GEOIP="CN,IR,CU,VN,ZW,BY";IO="x";LIMIT="x";INSTALL="n";RESET="n";REMOVE="n";ADD="n";NOICMP="x";release="";Src=""
 CHECK_OS(){
 	[[ $EUID -ne 0 ]] && echo "Run as root!" && exit 1
@@ -20,10 +35,16 @@ CHECK_OS(){
 # get arguments
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    -add) ADD="$2"; shift 2;;
+    -add)
+		echo -n -e "${CYAN}Please Enter Your SSH Port: ${ENDCOLOR}" && read SSHPORT
+		echo ""
+		ADD="$2"; shift 2;;
     -reset) RESET="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
-    -install) INSTALL="$2"; shift 2;;
+    -install)
+		echo -n -e "${CYAN}Please Enter Your SSH Port: ${ENDCOLOR}" && read SSHPORT
+		echo ""
+		INSTALL="$2"; shift 2;;
 	-noicmp) NOICMP="$2"; shift 2;;
     -geoip) GEOIP="$2"; shift 2;;
     -limit) LIMIT="$2"; shift 2;;
@@ -115,11 +136,13 @@ iptables_rules(){
 	fi	
 	
 	if [[ ${IO} == *"I"* ]]; then
+		iptables -I INPUT 1 -p tcp --dport $SSHPORT -j ACCEPT
 		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 	fi
 	
 	if [[ ${IO} == *"O"* ]]; then
+		iptables -I OUTPUT 1 -p tcp --dport $SSHPORT -j ACCEPT
 		iptables  -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 	fi
@@ -133,6 +156,9 @@ iptables_rules(){
 install_ipban(){
 	CHECK_OS
 	$Src -y update
+	$Src -y install build-essential linux-headers-$(uname -r) -y
+	modprobe x_tables && modprobe xt_geoip
+	lsmod | grep xt_geoip
 	$Src -y install curl gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent libnet-cidr-lite-perl
 	if [[ "${release}" == "debian" ]]; then
 		$Src -y install module-assistant xtables-addons-source
@@ -140,7 +166,6 @@ install_ipban(){
 		module-assistant -f auto-install xtables-addons-source
 	fi	
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
-	modprobe x_tables && modprobe xt_geoip
 	chmod +x /usr/lib/xtables-addons/xt_geoip_build
 	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl
 	iptables_restart
