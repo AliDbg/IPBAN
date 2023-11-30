@@ -35,10 +35,16 @@ CHECK_OS(){
 # get arguments
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    -add) ADD="$2"; shift 2;;
+    -add)
+		echo -n -e "${CYAN}Please Enter Your SSH Port: ${ENDCOLOR}" && read SSHPORT
+		echo ""
+		ADD="$2"; shift 2;;
     -reset) RESET="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
-    -install) INSTALL="$2"; shift 2;;
+    -install)
+		echo -n -e "${CYAN}Please Enter Your SSH Port: ${ENDCOLOR}" && read SSHPORT
+		echo ""
+		INSTALL="$2"; shift 2;;
 	-noicmp) NOICMP="$2"; shift 2;;
     -geoip) GEOIP="$2"; shift 2;;
     -limit) LIMIT="$2"; shift 2;;
@@ -124,7 +130,6 @@ chmod +x "/usr/share/ipban/ipban-update.sh"
 }
 
 iptables_rules(){
-	echo -n -e "${CYAN}Please Enter Your SSH Port: ${ENDCOLOR}" && read SSHPORT
 	if [[ ${NOICMP} == *"y"* ]]; then
 		iptables -A INPUT -p icmp -j DROP
 		ip6tables -A INPUT -p icmp -j DROP
