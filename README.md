@@ -13,7 +13,7 @@
   
 **Install**
 ```
-bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -install yes -io OUTPUT -geoip CN,IR,RU,CU,VN,ZW,BY -limit DROP -noicmp yes
+bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -install yes -io OUTPUT -geoip CN,IR -limit DROP -icmp no
 ```
 
 
@@ -40,7 +40,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -
 >
 > **-limit**  **DROP**(Reject) or **ACCEPT**(Allow)
 >
-> **-noicmp yes** (Disable ICMP Protocol for deny ping)
+> **-icmp no/yes** (Disable/Enable ICMP Protocol for deny ping)
 
 
 #### Tools
