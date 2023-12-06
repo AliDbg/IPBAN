@@ -42,9 +42,8 @@ success() {
 }
 iptables_restart(){
 	systemctl restart systemd-networkd.service systemd-resolved.service && sysctl -p
- 	systemctl restart iptables.service ip6tables.service
-	systemctl restart netfilter-persistent.service
- 	service iptables restart && service ip6tables restart
+ 	systemctl restart iptables.service ip6tables.service netfilter-persistent.service
+ 	service iptables restart && service ip6tables restart && service systemd-networkd restart
 	sleep 1
 }
 iptables_reset_rules(){
