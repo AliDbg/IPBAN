@@ -5,7 +5,7 @@
 #bash ./ipban.sh -reset yes
 #bash ./ipban.sh -remove yes
 ##################################################################
-GEOIP="CN,IR,CU,VN,ZW,BY";IO="x";LIMIT="x";INSTALL="n";RESET="n";REMOVE="n";ADD="n";ICMP="no";release="";Src=""
+GEOIP="CN,IR,CU,VN,ZW,BY";IO="x";LIMIT="x";INSTALL="n";RESET="n";REMOVE="n";ADD="n";ICMP="yes";release="";Src=""
 CHECK_OS(){
 	[[ $EUID -ne 0 ]] && echo "Run as root!" && exit 1
 	if [[ -f /etc/redhat-release ]]; then Src="yum";release="centos";
@@ -107,7 +107,7 @@ chmod +x "/usr/share/ipban/ipban-update.sh"
 }
 
 iptables_rules(){
-	if [[ ${ICMP} == *"y"* ]]; then
+	if [[ ${ICMP} == *"n"* ]]; then
 		iptables -A INPUT -p icmp -j DROP
 		ip6tables -A INPUT -p icmp -j DROP
 	fi	
