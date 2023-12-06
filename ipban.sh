@@ -133,9 +133,9 @@ install_ipban(){
 	$Src -y update
 	$Src -y install curl gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent libnet-cidr-lite-perl
 	if [[ "${release}" == "debian" ]]; then
-		$Src -y install module-assistant xtables-addons-source
-		module-assistant prepare
-		module-assistant -f auto-install xtables-addons-source
+		printf 'y\n' | $Src -y install module-assistant xtables-addons-source
+		printf 'y\n' | module-assistant prepare
+		printf 'y\n' | module-assistant -f auto-install xtables-addons-source
 	fi	
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	modprobe x_tables && modprobe xt_geoip
