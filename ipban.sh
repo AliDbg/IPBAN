@@ -1,11 +1,11 @@
 #!/bin/bash
 # v2.1 github.com/AliDbg/IPBAN ######### Linux Debian11-12 - Ubuntu20-22
-#bash ./ipban.sh -install yes -io OUTPUT -geoip CN,IR,CU,VN -limit DROP -noicmp yes
+#bash ./ipban.sh -install yes -io OUTPUT -geoip CN,IR,CU,VN -limit DROP -icmp no
 #bash ./ipban.sh -add yes -io INPUT -geoip CN -limit DROP
 #bash ./ipban.sh -reset yes
 #bash ./ipban.sh -remove yes
 ##################################################################
-GEOIP="CN,IR,CU,VN,ZW,BY";IO="x";LIMIT="x";INSTALL="n";RESET="n";REMOVE="n";ADD="n";NOICMP="x";release="";Src=""
+GEOIP="CN,IR,CU,VN,ZW,BY";IO="x";LIMIT="x";INSTALL="n";RESET="n";REMOVE="n";ADD="n";ICMP="no";release="";Src=""
 CHECK_OS(){
 	[[ $EUID -ne 0 ]] && echo "Run as root!" && exit 1
 	if [[ -f /etc/redhat-release ]]; then Src="yum";release="centos";
@@ -24,7 +24,7 @@ while [ "$#" -gt 0 ]; do
     -reset) RESET="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
     -install) INSTALL="$2"; shift 2;;
-	-noicmp) NOICMP="$2"; shift 2;;
+	-icmp) ICMP="$2"; shift 2;;
     -geoip) GEOIP="$2"; shift 2;;
     -limit) LIMIT="$2"; shift 2;;
     -io) IO="$2"; shift 2;;
@@ -107,7 +107,7 @@ chmod +x "/usr/share/ipban/ipban-update.sh"
 }
 
 iptables_rules(){
-	if [[ ${NOICMP} == *"y"* ]]; then
+	if [[ ${ICMP} == *"y"* ]]; then
 		iptables -A INPUT -p icmp -j DROP
 		ip6tables -A INPUT -p icmp -j DROP
 	fi	
