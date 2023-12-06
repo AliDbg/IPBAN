@@ -1,5 +1,5 @@
 #!/bin/bash
-# v2.0 github.com/AliDbg/IPBAN ######### Linux Debian11-12 - Ubuntu20-22
+# v2.1 github.com/AliDbg/IPBAN ######### Linux Debian11-12 - Ubuntu20-22
 #bash ./ipban.sh -install yes -io OUTPUT -geoip CN,IR,CU,VN -limit DROP -noicmp yes
 #bash ./ipban.sh -add yes -io INPUT -geoip CN -limit DROP
 #bash ./ipban.sh -reset yes
@@ -102,7 +102,7 @@ cat > "/usr/share/ipban/ipban-update.sh" << EOF
 	/usr/libexec/xtables-addons/xt_geoip_build -s
 	/usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
 	cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
-	service iptables restart && service ip6tables restart
+ 	service iptables restart && service ip6tables restart && service systemd-networkd restart
 	systemctl restart netfilter-persistent.service
 	clear && echo "Updated IPBAN!" 
 EOF
