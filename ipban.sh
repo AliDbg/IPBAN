@@ -101,8 +101,7 @@ cat > "/usr/share/ipban/ipban-update.sh" << EOF
 	/usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
 	cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
 	printf "\n\n" | sysctl -p && systemctl restart systemd-networkd.service iptables.service ip6tables.service netfilter-persistent.service
- 	sleep 1
-	clear && echo "Updated IPBAN!" 
+ 	sleep 1 && clear && echo "Updated IPBAN!" 
 EOF
 chmod +x "/usr/share/ipban/ipban-update.sh"
 }
