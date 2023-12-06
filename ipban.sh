@@ -139,8 +139,8 @@ install_ipban(){
 	fi	
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	modprobe x_tables && modprobe xt_geoip
-	chmod +x /usr/lib/xtables-addons/xt_geoip_build > /dev/null 2>&1
-	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl > /dev/null 2>&1
+	chmod +x /usr/lib/xtables-addons/xt_geoip_build &> /dev/null
+	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl &> /dev/null
 	iptables_restart
 	systemctl enable cron
  	ufw disable &> /dev/null
