@@ -143,7 +143,7 @@ install_ipban(){
 	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl > /dev/null 2>&1
 	iptables_restart
 	systemctl enable cron
- 	ufw disable > /dev/null 2>&1
+ 	ufw disable &> /dev/null
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "$(shuf -i 1-59 -n 1) $(shuf -i 1-23 -n 1) * * * bash /usr/share/ipban/ipban-update.sh >/dev/null 2>&1") | crontab -
 	download_build_dbip
