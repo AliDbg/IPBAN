@@ -41,8 +41,8 @@ success() {
 	exit 0
 }
 iptables_restart(){
-	systemctl restart systemd-networkd.service systemd-resolved.service iptables.service ip6tables.service netfilter-persistent.service && sysctl -p
- 	service systemd-networkd restart && service systemd-resolved restart && service iptables restart && service ip6tables restart && service netfilter-persistent restart 
+	sysctl -p && systemctl restart systemd-networkd.service iptables.service ip6tables.service netfilter-persistent.service
+ 	service systemd-networkd restart && service iptables restart && service ip6tables restart && service netfilter-persistent restart 
 	sleep 1
 }
 iptables_reset_rules(){
@@ -101,8 +101,8 @@ cat > "/usr/share/ipban/ipban-update.sh" << EOF
 	/usr/libexec/xtables-addons/xt_geoip_build -s
 	/usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
 	cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
-	systemctl restart systemd-networkd.service systemd-resolved.service iptables.service ip6tables.service netfilter-persistent.service && sysctl -p
- 	service systemd-networkd restart && service systemd-resolved restart && service iptables restart && service ip6tables restart && service netfilter-persistent restart 
+	sysctl -p && systemctl restart systemd-networkd.service iptables.service ip6tables.service netfilter-persistent.service
+ 	service systemd-networkd restart && service iptables restart && service ip6tables restart && service netfilter-persistent restart 
 	clear && echo "Updated IPBAN!" 
 EOF
 chmod +x "/usr/share/ipban/ipban-update.sh"
