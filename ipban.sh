@@ -118,6 +118,7 @@ iptables_rules(){
 	fi
 	
 	if [[ ${IO} == *"O"* ]]; then
+ 		# iptables -I OUTPUT 1 -p tcp --dport 22 -j ACCEPT
 		iptables  -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 	fi
@@ -131,6 +132,7 @@ iptables_rules(){
 install_ipban(){
 	CHECK_OS
 	$Src -y update
+	$Src -y install build-essential linux-headers-$(uname -r)
 	$Src -y install curl gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent libnet-cidr-lite-perl
 	if [[ "${release}" == "debian" ]]; then
 		printf 'y\n' | $Src -y install module-assistant xtables-addons-source
@@ -138,7 +140,8 @@ install_ipban(){
 		printf 'y\n' | module-assistant -f auto-install xtables-addons-source
 	fi	
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
-	modprobe x_tables && modprobe xt_geoip
+ 	modprobe x_tables && modprobe xt_geoip
+	lsmod | grep xt_geoip
 	chmod +x -f /usr/lib/xtables-addons/xt_geoip_build
 	chmod +x -f /usr/libexec/xtables-addons/xt_geoip_dl
 	iptables_restart
