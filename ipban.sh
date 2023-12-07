@@ -134,7 +134,7 @@ install_ipban(){
 	$Src -y update
 	$Src -y install build-essential linux-headers-$(uname -r)
 	$Src -y install curl gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl libnet-cidr-lite-perl
- 	printf 'y\n\y\n' | $Src -y install iptables-persistent
+ 	printf "\n\n" | $Src -y install iptables-persistent
 	if [[ "${release}" == "debian" ]]; then
 		printf 'y\n' | $Src -y install module-assistant xtables-addons-source
 		printf 'y\n' | module-assistant prepare
