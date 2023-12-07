@@ -1,5 +1,5 @@
 #!/bin/bash
-# v2.1 github.com/AliDbg/IPBAN ######### Linux Debian11-12 - Ubuntu20-22
+# v3.0 github.com/AliDbg/IPBAN ######### Linux Debian11-12 - Ubuntu20-22
 #bash ./ipban.sh -install yes -io OUTPUT -geoip CN,IR,CU,VN -limit DROP -icmp no
 #bash ./ipban.sh -add yes -io INPUT -geoip CN -limit DROP
 #bash ./ipban.sh -reset yes
@@ -113,7 +113,7 @@ iptables_rules(){
 	fi	
 	
 	if [[ ${IO} == *"I"* ]]; then
-		iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT
+		# iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT
 		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 	fi
