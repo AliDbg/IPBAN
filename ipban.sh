@@ -113,12 +113,12 @@ iptables_rules(){
 	fi	
 	
 	if [[ ${IO} == *"I"* ]]; then
+		iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT
 		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 	fi
 	
 	if [[ ${IO} == *"O"* ]]; then
- 		# iptables -I OUTPUT 1 -p tcp --dport 22 -j ACCEPT
 		iptables  -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 	fi
