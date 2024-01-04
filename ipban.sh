@@ -1,11 +1,11 @@
 #!/bin/bash
-# v3.0 github.com/AliDbg/IPBAN ######### Linux Debian11-12 - Ubuntu20-22
-#bash ./ipban.sh -install yes -io OUTPUT -geoip CN,IR,CU,VN -limit DROP -icmp no
+# v2.0 github.com/AliDbg/IPBAN ######### Linux Debian11-12 - Ubuntu20-22
+#bash ./ipban.sh -install yes -io OUTPUT -geoip CN,IR,CU,VN -limit DROP -noicmp yes
 #bash ./ipban.sh -add yes -io INPUT -geoip CN -limit DROP
 #bash ./ipban.sh -reset yes
 #bash ./ipban.sh -remove yes
 ##################################################################
-GEOIP="CN,IR,CU,VN,ZW,BY";IO="x";LIMIT="x";INSTALL="n";RESET="n";REMOVE="n";ADD="n";ICMP="yes";release="";Src=""
+GEOIP="CN,IR,CU,VN,ZW,BY";IO="x";LIMIT="x";INSTALL="n";RESET="n";REMOVE="n";ADD="n";NOICMP="x";release="";Src=""
 CHECK_OS(){
 	[[ $EUID -ne 0 ]] && echo "Run as root!" && exit 1
 	if [[ -f /etc/redhat-release ]]; then Src="yum";release="centos";
@@ -24,7 +24,7 @@ while [ "$#" -gt 0 ]; do
     -reset) RESET="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
     -install) INSTALL="$2"; shift 2;;
-	-icmp) ICMP="$2"; shift 2;;
+	-noicmp) NOICMP="$2"; shift 2;;
     -geoip) GEOIP="$2"; shift 2;;
     -limit) LIMIT="$2"; shift 2;;
     -io) IO="$2"; shift 2;;
@@ -41,7 +41,8 @@ success() {
 	exit 0
 }
 iptables_restart(){
-	printf "\n\n" | sysctl -p && systemctl restart systemd-networkd.service iptables.service ip6tables.service netfilter-persistent.service
+	service iptables restart && service ip6tables restart
+	systemctl restart netfilter-persistent.service
 	sleep 1
 }
 iptables_reset_rules(){
@@ -100,20 +101,20 @@ cat > "/usr/share/ipban/ipban-update.sh" << EOF
 	/usr/libexec/xtables-addons/xt_geoip_build -s
 	/usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
 	cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
-	printf "\n\n" | sysctl -p && systemctl restart systemd-networkd.service iptables.service ip6tables.service
- 	sleep 1 && clear && echo "Updated IPBAN!" 
+	service iptables restart && service ip6tables restart
+	systemctl restart netfilter-persistent.service
+	clear && echo "Updated IPBAN!" 
 EOF
 chmod +x "/usr/share/ipban/ipban-update.sh"
 }
 
 iptables_rules(){
-	if [[ ${ICMP} == *"n"* ]]; then
+	if [[ ${NOICMP} == *"y"* ]]; then
 		iptables -A INPUT -p icmp -j DROP
 		ip6tables -A INPUT -p icmp -j DROP
 	fi	
 	
 	if [[ ${IO} == *"I"* ]]; then
-		# iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT
 		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 	fi
@@ -132,21 +133,18 @@ iptables_rules(){
 install_ipban(){
 	CHECK_OS
 	$Src -y update
-	$Src -y install build-essential linux-headers-$(uname -r)
-	$Src -y install curl gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl libnet-cidr-lite-perl iptables-persistent
+	$Src -y install curl gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent libnet-cidr-lite-perl
 	if [[ "${release}" == "debian" ]]; then
-		printf 'y\n' | $Src -y install module-assistant xtables-addons-source
-		printf 'y\n' | module-assistant prepare
-		printf 'y\n' | module-assistant -f auto-install xtables-addons-source
+		$Src -y install module-assistant xtables-addons-source
+		module-assistant prepare
+		module-assistant -f auto-install xtables-addons-source
 	fi	
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
- 	modprobe x_tables && modprobe xt_geoip
-	lsmod | grep xt_geoip
-	chmod +x -f /usr/lib/xtables-addons/xt_geoip_build
-	chmod +x -f /usr/libexec/xtables-addons/xt_geoip_dl
+	modprobe x_tables && modprobe xt_geoip
+	chmod +x /usr/lib/xtables-addons/xt_geoip_build
+	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl
 	iptables_restart
-	systemctl enable cron
- 	ufw disable &> /dev/null
+	systemctl enable cron && ufw disable
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "$(shuf -i 1-59 -n 1) $(shuf -i 1-23 -n 1) * * * bash /usr/share/ipban/ipban-update.sh >/dev/null 2>&1") | crontab -
 	download_build_dbip
