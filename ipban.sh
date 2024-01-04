@@ -39,7 +39,6 @@ success() {
 }
 iptables_restart(){
 	printf "\n\n" | sysctl -p && systemctl restart systemd-networkd.service iptables.service ip6tables.service netfilter-persistent.service
-	iptables-save | uniq | iptables-restore  
 	sleep 1
 }
 iptables_reset_rules(){
@@ -50,6 +49,7 @@ iptables_reset_rules(){
 	ip6tables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 }
 iptables_save_restart(){
+	iptables-save | uniq | iptables-restore  
 	iptables-save > /etc/iptables/rules.v4 && ip6tables-save > /etc/iptables/rules.v6
 	iptables_restart
 }
