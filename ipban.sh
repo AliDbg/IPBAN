@@ -39,7 +39,7 @@ success() {
 }
 iptables_restart(){
 	printf "\n\n" | sysctl -p && systemctl restart systemd-networkd.service iptables.service ip6tables.service netfilter-persistent.service
-  iptables-save | uniq | iptables-restore  
+	iptables-save | uniq | iptables-restore  
 	sleep 1
 }
 iptables_reset_rules(){
