@@ -13,7 +13,7 @@
   
 **Add Rules**
 ```
-bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -add OUTPUT -geoip CN,IR -limit DROP
+bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -add OUTPUT -geoip CN,IR -limit DROP
 ```
 
 **Reset Rules**
