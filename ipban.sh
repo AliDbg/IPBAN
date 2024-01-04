@@ -5,7 +5,7 @@
 #bash ./ipban.sh -reset yes
 #bash ./ipban.sh -remove yes
 ##################################################################
-GEOIP="CN,IR,CU,VN,ZW,BY";LIMIT="x";RESET="n";REMOVE="n";ADD="n";ICMP="yes";release="";Src=""
+GEOIP="CN,IR,CU,VN,ZW,BY";LIMIT="x";RESET="n";REMOVE="n";ADD="";ICMP="yes";release="";Src=""
 CHECK_OS(){
 	[[ $EUID -ne 0 ]] && echo "Run as root!" && exit 1
 	if [[ -f /etc/redhat-release ]]; then Src="yum";release="centos";
@@ -40,6 +40,7 @@ success() {
 }
 iptables_restart(){
 	printf "\n\n" | sysctl -p && systemctl restart systemd-networkd.service iptables.service ip6tables.service netfilter-persistent.service
+  iptables-save | uniq | iptables-restore  
 	sleep 1
 }
 iptables_reset_rules(){
@@ -51,7 +52,6 @@ iptables_reset_rules(){
 }
 iptables_save_restart(){
 	iptables-save > /etc/iptables/rules.v4 && ip6tables-save > /etc/iptables/rules.v6
-	iptables-save | uniq | iptables-restore
 	iptables_restart
 }
 uninstall_ipban(){
