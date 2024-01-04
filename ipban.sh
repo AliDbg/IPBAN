@@ -22,7 +22,7 @@ while [ "$#" -gt 0 ]; do
     -add) ADD="$2"; shift 2;;
     -reset) RESET="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
-	-icmp) ICMP="$2"; shift 2;;
+    -icmp) ICMP="$2"; shift 2;;
     -geoip) GEOIP="$2"; shift 2;;
     -limit) LIMIT="$2"; shift 2;;
     *) shift 1;;
