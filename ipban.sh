@@ -1,11 +1,11 @@
 #!/bin/bash
-# v2.0 github.com/AliDbg/IPBAN ######### Linux Debian11-12 - Ubuntu20-22
-#bash ./ipban.sh -install yes -io OUTPUT -geoip CN,IR,CU,VN -limit DROP -noicmp yes
-#bash ./ipban.sh -add yes -io INPUT -geoip CN -limit DROP
+# v4.0 github.com/AliDbg/IPBAN ######### Linux Debian>11 Ubuntu>20
+#bash ./ipban.sh -add OUTPUT -geoip CN,IR -limit DROP -icmp no
+#bash ./ipban.sh -add INPUT -geoip CN -limit DROP
 #bash ./ipban.sh -reset yes
 #bash ./ipban.sh -remove yes
 ##################################################################
-GEOIP="CN,IR,CU,VN,ZW,BY";IO="x";LIMIT="x";INSTALL="n";RESET="n";REMOVE="n";ADD="n";NOICMP="x";release="";Src=""
+GEOIP="CN,IR,CU,VN,ZW,BY";LIMIT="x";RESET="n";REMOVE="n";ADD="n";ICMP="yes";release="";Src=""
 CHECK_OS(){
 	[[ $EUID -ne 0 ]] && echo "Run as root!" && exit 1
 	if [[ -f /etc/redhat-release ]]; then Src="yum";release="centos";
@@ -23,11 +23,9 @@ while [ "$#" -gt 0 ]; do
     -add) ADD="$2"; shift 2;;
     -reset) RESET="$2"; shift 2;;
     -remove) REMOVE="$2"; shift 2;;
-    -install) INSTALL="$2"; shift 2;;
-	-noicmp) NOICMP="$2"; shift 2;;
+	-icmp) ICMP="$2"; shift 2;;
     -geoip) GEOIP="$2"; shift 2;;
     -limit) LIMIT="$2"; shift 2;;
-    -io) IO="$2"; shift 2;;
     *) shift 1;;
   esac
 done
@@ -41,8 +39,7 @@ success() {
 	exit 0
 }
 iptables_restart(){
-	service iptables restart && service ip6tables restart
-	systemctl restart netfilter-persistent.service
+	printf "\n\n" | sysctl -p && systemctl restart systemd-networkd.service iptables.service ip6tables.service netfilter-persistent.service
 	sleep 1
 }
 iptables_reset_rules(){
@@ -54,6 +51,7 @@ iptables_reset_rules(){
 }
 iptables_save_restart(){
 	iptables-save > /etc/iptables/rules.v4 && ip6tables-save > /etc/iptables/rules.v6
+	iptables-save | uniq | iptables-restore
 	iptables_restart
 }
 uninstall_ipban(){
@@ -63,7 +61,7 @@ uninstall_ipban(){
 	rm /etc/iptables/rules.v4 && rm /etc/iptables/rules.v6
 	iptables-save
 	rm -rf /usr/share/ipban/
-	success "Uninstalled IPBAN!"
+	success "IPBAN Uninstalled!"
 }
 
 download_build_dbip (){
@@ -101,72 +99,76 @@ cat > "/usr/share/ipban/ipban-update.sh" << EOF
 	/usr/libexec/xtables-addons/xt_geoip_build -s
 	/usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
 	cd && rm /usr/share/xt_geoip/dbip-country-lite.csv
-	service iptables restart && service ip6tables restart
-	systemctl restart netfilter-persistent.service
-	clear && echo "Updated IPBAN!" 
+	printf "\n\n" | sysctl -p && systemctl restart systemd-networkd.service iptables.service ip6tables.service
+ 	sleep 1 && clear && echo "Updated IPBAN!" 
 EOF
 chmod +x "/usr/share/ipban/ipban-update.sh"
 }
 
 iptables_rules(){
-	if [[ ${NOICMP} == *"y"* ]]; then
+	if [[ ${ICMP} == *"n"* ]]; then
 		iptables -A INPUT -p icmp -j DROP
 		ip6tables -A INPUT -p icmp -j DROP
 	fi	
 	
-	if [[ ${IO} == *"I"* ]]; then
+	if [[ ${ADD} == *"I"* ]]; then
 		iptables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A INPUT -m geoip --src-cc "${GEOIP}" -j "${LIMIT}"
 	fi
 	
-	if [[ ${IO} == *"O"* ]]; then
+	if [[ ${ADD} == *"O"* ]]; then
 		iptables  -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A OUTPUT -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 	fi
 		
-	if [[ ${IO} == *"F"* ]]; then
+	if [[ ${ADD} == *"F"* ]]; then
 		iptables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 		ip6tables -A FORWARD -m geoip --dst-cc "${GEOIP}" -j "${LIMIT}"
 	fi
 }
 
 install_ipban(){
-	CHECK_OS
 	$Src -y update
-	$Src -y install curl gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl iptables-persistent libnet-cidr-lite-perl
+	$Src -y install build-essential linux-headers-$(uname -r)
+	$Src -y install curl gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl libnet-cidr-lite-perl iptables-persistent
 	if [[ "${release}" == "debian" ]]; then
-		$Src -y install module-assistant xtables-addons-source
-		module-assistant prepare
-		module-assistant -f auto-install xtables-addons-source
+		printf 'y\n' | $Src -y install module-assistant xtables-addons-source
+		printf 'y\n' | module-assistant prepare
+		printf 'y\n' | module-assistant -f auto-install xtables-addons-source
 	fi	
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
-	modprobe x_tables && modprobe xt_geoip
-	chmod +x /usr/lib/xtables-addons/xt_geoip_build
-	chmod +x /usr/libexec/xtables-addons/xt_geoip_dl
+ 	modprobe x_tables && modprobe xt_geoip
+	if [[ -n $(lsmod | grep "x_tables\|xt_geoip") ]]; then success "x_tables Installed!"; fi
+	chmod +x -f /usr/lib/xtables-addons/xt_geoip_build
+	chmod +x -f /usr/libexec/xtables-addons/xt_geoip_dl
 	iptables_restart
-	systemctl enable cron && ufw disable
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "$(shuf -i 1-59 -n 1) $(shuf -i 1-23 -n 1) * * * bash /usr/share/ipban/ipban-update.sh >/dev/null 2>&1") | crontab -
 	download_build_dbip
 	create_update_sh && bash "/usr/share/ipban/ipban-update.sh"	
 	iptables_reset_rules
 	iptables_rules
-	systemctl enable netfilter-persistent.service
-	iptables_save_restart
-	success "Installed IPBAN!"
+	systemctl enable netfilter-persistent.service && systemctl enable cron && ufw disable
+	success "IPBAN Installed!"
 }
+
 add_ipban(){
-	iptables_rules
+	CHECK_OS
+	if [[ -d "/usr/share/ipban/" ]] && [[ -n $(lsmod | grep "x_tables\|xt_geoip") ]]; then
+		iptables_rules
+	else
+		install_ipban
+	fi
 	iptables_save_restart
-	success "Added Rules!"
+	success "Rules Added!"
 }
+
 reset_iptables(){
 	iptables_reset_rules
 	iptables_save_restart
-	success "Resetted IPTABLES!"
+	success "IPTABLES Resetted!"
 }
+if [[ -n ${ADD} ]]; then add_ipban; fi
 if [[ ${RESET} == *"y"* ]]; then reset_iptables; fi
-if [[ ${ADD} == *"y"* ]]; then add_ipban; fi
 if [[ ${REMOVE} == *"y"* ]]; then uninstall_ipban; fi
-if [[ ${INSTALL} == *"y"* ]]; then install_ipban; fi
 #### END.
