@@ -7,36 +7,30 @@
 - Support INPUT/OUTPUT Server
 - Persistent settings after reboot
 - Automatic IP update every day
-- Support Debian v11-12, Ubuntu v20-22
+- Support Debian>11 Ubuntu>20
 ## 
 > ```iptables-save > backup-rules.txt```
   
-**Install**
-```
-bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -install yes -io OUTPUT -geoip CN,IR -limit DROP
-```
-
-
 **Add Rules**
 ```
-bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -add yes -io INPUT -geoip CN,RU -limit DROP
+bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -add OUTPUT -geoip CN,IR -limit DROP
 ```
 
 **Reset Rules**
 ```
-bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -reset yes
+bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -reset
 ```
 
 **Remove IPBAN**
 ```
-bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -remove yes
+bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -remove
 ```
 ## 
 #### Arguments
 >
-> **-io** **INPUT** or **OUTPUT** or **FORWARD**
+> **-add** **INPUT** or **OUTPUT** or **FORWARD**
 >
-> **-geoip** Country	Alpha-2 code
+> **-geoip** Country Alpha-2 code
 >
 > **-limit**  **DROP**(Reject) or **ACCEPT**(Allow)
 >
