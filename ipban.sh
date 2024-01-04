@@ -67,8 +67,8 @@ cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 	rm -rf "\${dtmp}" && mkdir -p "\${dtmp}" && cd "\${dtmp}"
 	# Download dbipLite Full
 	timestamp=\$(date "+%Y-%m")
-	curl -m 9 -fLO "https://download.db-ip.com/free/dbip-country-lite-\${timestamp}.csv.gz" &> /dev/null
-	curl -m 9 -fLO "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O &> /dev/null
+	curl -m 15 -fLO "https://download.db-ip.com/free/dbip-country-lite-\${timestamp}.csv.gz" &> /dev/null
+	curl -m 15 -fLO "https://mailfud.org/geoip-legacy/GeoIP-legacy.csv.gz" -O &> /dev/null
 	if [[ "\$?" != 0 ]]; then
 	curl -m 9 -fLO "https://legacy-geoip-csv.ufficyo.com/Legacy-MaxMind-GeoIP-database.tar.gz" &> /dev/null
 	fi		
