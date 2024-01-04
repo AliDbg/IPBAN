@@ -143,11 +143,11 @@ install_ipban(){
 	chmod +x -f /usr/libexec/xtables-addons/xt_geoip_dl
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "$(shuf -i 1-59 -n 1) $(shuf -i 1-23 -n 1) * * * bash /usr/share/ipban/ipban-update.sh >/dev/null 2>&1") | crontab -
+	systemctl enable netfilter-persistent.service && systemctl enable cron && ufw disable
 	download_build_dbip
 	create_update_sh && bash "/usr/share/ipban/ipban-update.sh"	
 	iptables_reset_rules
 	iptables_rules
-	systemctl enable netfilter-persistent.service && systemctl enable cron && ufw disable
 	success "IPBAN Installed!"
 }
 
