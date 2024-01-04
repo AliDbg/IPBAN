@@ -18,12 +18,12 @@ bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -add OUTPUT -geoip C
 
 **Reset Rules**
 ```
-bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -reset
+bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -reset y
 ```
 
 **Remove IPBAN**
 ```
-bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -remove
+bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -remove y
 ```
 ## 
 #### Arguments
