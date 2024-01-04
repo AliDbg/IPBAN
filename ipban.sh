@@ -137,7 +137,7 @@ install_ipban(){
 	fi	
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
  	modprobe x_tables && modprobe xt_geoip
-	if lsmod | grep -q "x_tables\|xt_geoip"; then success "x_tables Installed!"; fi
+	if lsmod | grep -q "x_tables\|xt_geoip"; then echo "x_tables Installed!"; fi
 	chmod +x -f /usr/lib/xtables-addons/xt_geoip_build
 	chmod +x -f /usr/libexec/xtables-addons/xt_geoip_dl
 	iptables_restart
