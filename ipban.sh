@@ -1,7 +1,6 @@
 #!/bin/bash
 # v4.0 github.com/AliDbg/IPBAN ######### Linux Debian>11 Ubuntu>20
 #bash ./ipban.sh -add OUTPUT -geoip CN,IR -limit DROP -icmp no
-#bash ./ipban.sh -add INPUT -geoip CN -limit DROP
 #bash ./ipban.sh -reset yes
 #bash ./ipban.sh -remove yes
 ##################################################################
