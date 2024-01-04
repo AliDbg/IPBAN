@@ -128,7 +128,7 @@ iptables_rules(){
 
 install_ipban(){
 	$Src -y update
-	$Src -y install build-essential linux-headers-$(uname -r)
+	$Src -y install build-essential linux-headers-"$(uname -r)"
 	$Src -y install curl gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl libnet-cidr-lite-perl iptables-persistent
 	if [[ "${release}" == "debian" ]]; then
 		printf 'y\n' | $Src -y install module-assistant xtables-addons-source
@@ -137,7 +137,7 @@ install_ipban(){
 	fi	
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
  	modprobe x_tables && modprobe xt_geoip
-	if [[ -n $(lsmod | grep "x_tables\|xt_geoip") ]]; then success "x_tables Installed!"; fi
+	if lsmod | grep -q "x_tables\|xt_geoip"; then success "x_tables Installed!"; fi
 	chmod +x -f /usr/lib/xtables-addons/xt_geoip_build
 	chmod +x -f /usr/libexec/xtables-addons/xt_geoip_dl
 	iptables_restart
@@ -153,7 +153,7 @@ install_ipban(){
 
 add_ipban(){
 	CHECK_OS
-	if [[ -d "/usr/share/ipban/" ]] && [[ -n $(lsmod | grep "x_tables\|xt_geoip") ]]; then
+	if [[ -d "/usr/share/ipban/" ]] && lsmod | grep -q "x_tables\|xt_geoip" ; then
 		iptables_rules
 	else
 		install_ipban
