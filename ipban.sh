@@ -141,7 +141,6 @@ install_ipban(){
 	if lsmod | grep -q "x_tables\|xt_geoip"; then echo "x_tables Installed!"; fi
 	chmod +x -f /usr/lib/xtables-addons/xt_geoip_build
 	chmod +x -f /usr/libexec/xtables-addons/xt_geoip_dl
-	iptables_restart
 	crontab -l | grep -v "ipban-update.sh" | crontab -
 	(crontab -l 2>/dev/null; echo "$(shuf -i 1-59 -n 1) $(shuf -i 1-23 -n 1) * * * bash /usr/share/ipban/ipban-update.sh >/dev/null 2>&1") | crontab -
 	download_build_dbip
