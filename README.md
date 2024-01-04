@@ -7,7 +7,7 @@
 - Support INPUT/OUTPUT Server
 - Persistent settings after reboot
 - Automatic IP update every day
-- Support Debian>11 Ubuntu>20
+- Support Debian≥11 Ubuntu≥20
 ## 
 > ```iptables-save > backup-rules.txt```
   
