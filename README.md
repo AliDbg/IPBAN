@@ -13,17 +13,17 @@
   
 **Add Rules**
 ```
-bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -add OUTPUT -geoip CN,IR -limit DROP
+bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -add OUTPUT -geoip CN,IR -limit DROP
 ```
 
 **Reset Rules**
 ```
-bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -reset y
+bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -reset y
 ```
 
 **Remove IPBAN**
 ```
-bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -remove y
+bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -remove y
 ```
 ## 
 #### Arguments
