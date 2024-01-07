@@ -127,6 +127,26 @@ iptables_rules(){
 	fi
 }
 
+reboot_restore(){
+	iptables-save | awk '!x[$0]++' > /etc/iptables/rules.v4
+	ip6tables-save | awk '!x[$0]++' > /etc/iptables/rules.v6
+	if test -f /etc/rc.local; then
+		sed -i '$i\iptables -F && iptables-restore < /etc/iptables/rules.v4 && iptables-restore < /etc/iptables/rules.v6' /etc/rc.local
+		chmod +x /etc/rc.local
+		systemctl stop rc-local.service
+		systemctl start rc-local.service
+	else
+		cat > "/etc/rc.local" << EOF
+#!/bin/bash
+	iptables -F && iptables-restore < /etc/iptables/rules.v4 && iptables-restore < /etc/iptables/rules.v6
+	exit 0
+EOF
+		chmod +x /etc/rc.local
+		systemctl stop rc-local.service
+		systemctl start rc-local.service
+	fi
+}
+
 install_ipban(){
 	$Src -y update
 	$Src -y install build-essential linux-headers-"$(uname -r)"
@@ -148,6 +168,7 @@ install_ipban(){
 	create_update_sh && bash "/usr/share/ipban/ipban-update.sh"	
 	iptables_reset_rules
 	iptables_rules
+	reboot_restore
 	success "IPBAN Installed!"
 }
 
