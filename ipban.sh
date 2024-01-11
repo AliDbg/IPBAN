@@ -216,7 +216,7 @@ install_ipban(){
 		modprobe -fq xt_geoip
 	fi
 	if lsmod | grep -q "x_tables\|xt_geoip"; then
-		_info "Installing xt_geoip...."; 
+		_info "Building xt_geoip data...."; 
 	else
 		_error "x_tables not installed!";	exit 1;		
 	fi	
