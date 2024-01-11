@@ -33,7 +33,7 @@ bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -remove y
 
 **Ping IP/Domain for testing**
 ```
-ping ip # 1.1.1.1
+ping x.x.x.x
 ping example.com
 ```
 
