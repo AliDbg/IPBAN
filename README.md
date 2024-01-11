@@ -11,7 +11,7 @@
 ## 
 > ```iptables-save > backup-rules.txt```
   
-**Add Rules**
+**Install/Add Rules**
 ```
 bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -add OUTPUT -geoip CN,IR -limit DROP
 ```
