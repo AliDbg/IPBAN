@@ -10,7 +10,7 @@
 - Automatic IP update every day
 - Support Ubuntu≥20 Debian≥11 CentOS≥8
 ## 
-**Backup IPtables/Disable UFW**
+**Backup IPtables/Disable ufw**
 ```
 iptables-save > backup-rules.txt
 systemctl stop firewalld ufw && systemctl disable firewalld ufw
