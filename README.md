@@ -10,7 +10,10 @@
 - Automatic IP update every day
 - Support Ubuntu≥20 Debian≥11 CentOS≥8
 ## 
-> ```iptables-save > backup-rules.txt```
+```
+iptables-save > backup-rules.txt
+systemctl stop firewalld ufw && systemctl disable firewalld ufw
+```
   
 **Install/Add Rules**
 ```
