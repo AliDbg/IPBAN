@@ -30,6 +30,14 @@ bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -reset y
 ```
 bash <(wget -qO- cdn.jsdelivr.net/gh/AliDbg/IPBAN/ipban.sh) -remove y
 ```
+
+**Ping IP/Domain for testing**
+```
+ping ip
+ping example.com
+```
+
+
 ## 
 #### Arguments
 >
