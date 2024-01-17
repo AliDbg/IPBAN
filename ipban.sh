@@ -209,7 +209,7 @@ sys_updt(){
 }
 
 install_ipban(){
-	update_sysctl "fs.file-max" "1000000"
+ 	sed -i "/fs.file-max/d" /etc/sysctl.conf
 	sysctl -p > /dev/null 2>&1; init 1; init 3
 	#iptables-save  > backup-rules-ipv4.txt
 	#ip6tables-save > backup-rules-ipv6.txt
