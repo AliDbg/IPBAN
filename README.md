@@ -12,7 +12,7 @@
 ## 
 **Backup IPtables/Disable ufw**
 ```
-iptables-save > backup-rules-ipv4.txt;ip6tables-save > backup-rules-ipv6.txt;\
+iptables-save > backup-rules-ipv4.txt; ip6tables-save > backup-rules-ipv6.txt;\
 systemctl stop firewalld ufw 2>/dev/null && systemctl disable firewalld ufw 2>/dev/null
 ```
   
