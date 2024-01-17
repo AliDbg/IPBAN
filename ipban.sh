@@ -160,7 +160,7 @@ iptables_rules(){
 
 sys_updt(){
 	$PM -y update
-	sysctl -p; init 1; init 3
+	sysctl -p > /dev/null 2>&1; init 1; init 3
 	centosV=$(type rpm &>/dev/null && rpm -E %centos)
 	fedoraV=$(type rpm &>/dev/null && rpm -E %fedora)
 	rhelV=$(type rpm &>/dev/null && rpm -E %rhel)
