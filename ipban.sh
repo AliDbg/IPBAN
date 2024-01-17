@@ -124,7 +124,7 @@ cat > "/usr/share/ipban/ipban-update.sh" << EOF
 	[ -f /usr/libexec/xtables-addons/xt_geoip_build ] && /usr/libexec/xtables-addons/xt_geoip_build -s
 	[ -f /usr/lib/xtables-addons/xt_geoip_build ] && /usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip/
 	cd && rm -f /usr/share/xt_geoip/dbip-country-lite.csv
-	\$( sysctl -p; init 1; init 3 )
+	\$( sysctl -p > /dev/null 2>&1; init 1; init 3 )
 	echo
 EOF
 chmod +x "/usr/share/ipban/ipban-update.sh"
