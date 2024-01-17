@@ -41,6 +41,12 @@ _error() { echo -e "\e[1;41m $1 \e[0m";}
 _info() { echo -e "\e[1;44m $1 \e[0m";}
 _warning() { echo -e "\e[1;43m $1 \e[0m";}
 
+update_sysctl(){
+	if [ -f "/etc/sysctl.conf" ] && [ ! -z "$1" ] && [ ! -z "$2" ]; then
+		sed -i "/$1/d" /etc/sysctl.conf; echo "$1 = $2" | tee -a /etc/sysctl.conf
+	fi
+}
+
 iptables_print() {
 	#clear
 	iptables -vnL | grep -m 1 "pkts"
@@ -203,7 +209,10 @@ sys_updt(){
 }
 
 install_ipban(){
-	sysctl -p; init 1; init 3
+	update_sysctl "fs.file-max" "1000000"
+	sysctl -p > /dev/null 2>&1; init 1; init 3
+	systemctl stop firewalld ufw 2>/dev/null 
+	systemctl disable firewalld ufw 2>/dev/null
 	crontab -l | grep -v "ipban\|iptables" | crontab -
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	chmod +x -f /usr/lib/xtables-addons/xt_geoip_build
