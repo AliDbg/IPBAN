@@ -36,7 +36,7 @@ bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -remove y
 > **-icmp no/yes** (Deny ping your server)
 
 #### Useful commands
-> iptables -F && ip6tables -F ## Reset iptables rules
+> iptables -F && ip6tables -F ## Reset/clean iptables rules
 > 
 > systemctl enable firewalld ufw ## Enable firewall
 > 
