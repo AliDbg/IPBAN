@@ -6,7 +6,6 @@
 - Support all protocols and ports
 - Support INPUT/OUTPUT Server
 - Persistent settings/rules after reboot
-- Remove duplicate iptables rules
 - Automatic IP update every day
 - Support Ubuntu≥20 Debian≥11 CentOS≥8
 ## 
