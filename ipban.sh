@@ -213,8 +213,6 @@ install_ipban(){
 	mkdir -p /usr/share/ipban/ && chmod a+rwx /usr/share/ipban/
 	iptables-save  > /usr/share/ipban/backup-rules-ipv4.txt
 	ip6tables-save > /usr/share/ipban/backup-rules-ipv6.txt
-	systemctl stop firewalld ufw 2>/dev/null 
-	systemctl disable firewalld ufw 2>/dev/null
 	crontab -l | grep -v "ipban\|iptables" | crontab -
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	chmod +x -f /usr/lib/xtables-addons/xt_geoip_build
