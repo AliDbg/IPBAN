@@ -10,34 +10,16 @@
 - Automatic IP update every day
 - Support Ubuntu≥20 Debian≥11 CentOS≥8
 ## 
-**Backup IPtables/Disable ufw**
-```
-iptables-save  > backup-rules-ipv4.txt;\
-ip6tables-save > backup-rules-ipv6.txt;\
-systemctl stop firewalld ufw 2>/dev/null && systemctl disable firewalld ufw 2>/dev/null
-```
-  
-**Install/Add Rules**
+
+**Install [Add rules]**
 ```
 bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -add OUTPUT -geoip CN,IR -limit DROP
 ```
 
-**Reset Rules**
-```
-bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -reset y
-```
-
-**Remove IPBAN**
+**Unistall IPBAN [Restore previous iptables settings]**
 ```
 bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -remove y
 ```
-
-**Ping IP/Domain for testing**
-```
-ping x.x.x.x
-ping example.com
-```
-
 
 ## 
 #### Arguments
@@ -48,8 +30,18 @@ ping example.com
 >
 > **-limit**  **DROP**(Reject) or **ACCEPT**(Allow)
 >
-> **-icmp no/yes** (Disable/Enable ICMP Protocol for deny ping)
+> **-icmp no/yes** (Deny ping your server)
 
+#### useful command
+> iptables -F && ip6tables -F ## Reset iptables rules
+> 
+> systemctl enable firewalld ufw ## Enable firewall
+> 
+> iptables-save > rules.txt ## Backup iptables
+> 
+> iptables-restore < rules.txt ## Restore iptables
+> 
+> iptables -nvL # Show iptables rule
 
 #### Tools
 > SSH Client: https://github.com/nirui/sshwifty
