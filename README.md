@@ -15,7 +15,7 @@
 bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -add OUTPUT -geoip CN,IR -limit DROP
 ```
 
-**Unistall IPBAN [Restore previous iptables settings]**
+**Unistall IPBAN [Restore previous iptables rules]**
 ```
 bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -remove y
 ```
