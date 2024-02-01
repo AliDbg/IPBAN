@@ -42,6 +42,8 @@ bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -remove y
 > iptables-restore < rules.txt ## Restore iptables
 > 
 > iptables -nvL # Show iptables rule
+>
+> ping x.x.x.x # Ping ip and domain
 
 #### Tools
 > SSH Client: https://github.com/nirui/sshwifty
