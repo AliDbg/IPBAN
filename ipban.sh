@@ -192,18 +192,18 @@ sys_updt(){
 		cpanm Net::CIDR::Lite
 		cpanm Text::CSV_XS
 	fi
-		systemctl daemon-reload 
-  		systemctl enable iptables.service 2>/dev/null
-		systemctl enable ip6tables.service 2>/dev/null
-		systemctl enable netfilter-persistent.service 2>/dev/null
-		systemctl enable cron.service 2>/dev/null
-  
-	if ! lsmod | grep -q "x_tables\|xt_geoip" && [[ "${DISTRO}" == *"debian"* ]]; then
+
+ 	if ! lsmod | grep -q "x_tables\|xt_geoip" && [[ "${DISTRO}" == *"debian"* ]]; then
 		printf 'y\n' | apt -y install module-assistant xtables-addons-source
 		printf 'y\n' | module-assistant prepare
 		printf 'y\n' | module-assistant -f auto-install xtables-addons-source
 	fi	
 
+	systemctl daemon-reload 2>/dev/null
+  	systemctl enable iptables.service 2>/dev/null
+	systemctl enable ip6tables.service 2>/dev/null
+	systemctl enable netfilter-persistent.service 2>/dev/null
+	systemctl enable cron.service 2>/dev/null
 }
 
 install_ipban(){
