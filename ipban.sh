@@ -1,5 +1,5 @@
 #!/bin/bash
-# v5.0.2 github.com/AliDbg/IPBAN ######### Ubuntu≥20 Debian≥11 CentOS≥8
+# v5.0.3 github.com/AliDbg/IPBAN ######### Ubuntu≥20 Debian≥11 CentOS≥8
 #bash ./ipban.sh -add OUTPUT -geoip CN,IR -limit DROP -icmp no
 #bash ./ipban.sh -reset yes
 #bash ./ipban.sh -remove yes
@@ -183,9 +183,6 @@ sys_updt(){
 	if [[ $PM == "apt" ]]; then
 		apt -y install build-essential linux-headers-"$(uname -r)" 
 		apt -y install curl gzip tar perl xtables-addons-common xtables-addons-dkms libtext-csv-xs-perl libmoosex-types-netaddr-ip-perl libnet-cidr-lite-perl iptables-persistent
-		systemctl daemon-reload 
-		systemctl enable netfilter-persistent.service 2>/dev/null
-		systemctl enable cron.service 2>/dev/null
 	else
 		yum -y install kernel-devel-"$(uname -r)" iptables iptables-devel iptables-services perl-Net-CIDR-Lite perl-Text-CSV_XS epel-release epel-next-release
 		dnf repolist enabled
@@ -194,12 +191,13 @@ sys_updt(){
 		dnf -y install perl-App-cpanminus
 		cpanm Net::CIDR::Lite
 		cpanm Text::CSV_XS
-		systemctl daemon-reload 
-		systemctl enable iptables.service 2>/dev/null
-		systemctl enable ip6tables.service 2>/dev/null
-	
 	fi
-	
+		systemctl daemon-reload 
+  		systemctl enable iptables.service 2>/dev/null
+		systemctl enable ip6tables.service 2>/dev/null
+		systemctl enable netfilter-persistent.service 2>/dev/null
+		systemctl enable cron.service 2>/dev/null
+  
 	if ! lsmod | grep -q "x_tables\|xt_geoip" && [[ "${DISTRO}" == *"debian"* ]]; then
 		printf 'y\n' | apt -y install module-assistant xtables-addons-source
 		printf 'y\n' | module-assistant prepare
