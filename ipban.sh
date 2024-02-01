@@ -1,5 +1,5 @@
 #!/bin/bash
-# v5.0.3 github.com/AliDbg/IPBAN ######### Ubuntu≥20 Debian≥11 CentOS≥8
+# v5.1.0 github.com/AliDbg/IPBAN ######### Ubuntu≥20 Debian≥11 CentOS≥8
 #bash ./ipban.sh -add OUTPUT -geoip CN,IR -limit DROP -icmp no
 #bash ./ipban.sh -reset yes
 #bash ./ipban.sh -remove yes
@@ -80,21 +80,22 @@ iptables_save(){
 }
 
 uninstall_ipban(){
-	rm -rf /usr/share/ipban/
 	crontab -l | grep -v "ipban\|iptables" | crontab -
 	iptables_clean_rules
 	rm -f "/etc/iptables/rules.v4" "/etc/iptables/rules.v6"
 	rm -f "/etc/sysconfig/rules.v4" "/etc/sysconfig/rules.v6"
 	rm -f "/etc/sysconfig/iptables" "/etc/sysconfig/ip6tables"
 	rm -f "/etc/sysconfig/iptables-config" "/etc/sysconfig/ip6tables-config"
+	iptables-restore < /usr/share/ipban/backup-rules-ipv4.txt
+	ip6tables-restore < /usr/share/ipban/backup-rules-ipv6.txt
 	iptables-save
 	ip6tables-save
+	rm -rf /usr/share/ipban/
 	clear
 	_success "IPBAN Uninstalled!" && exit 1
 }
 
 download_build_dbip (){
-	mkdir -p /usr/share/ipban/ && chmod a+rwx /usr/share/ipban/
 cat > "/usr/share/ipban/download-build-dbip.sh" << EOF
 #!/bin/bash
 	dtmp="/usr/share/xt_geoip/tmp/"
@@ -209,10 +210,11 @@ sys_updt(){
 install_ipban(){
  	sed -i "/fs.file-max/d" /etc/sysctl.conf
 	sysctl -p > /dev/null 2>&1; init 1; init 3
-	#iptables-save  > backup-rules-ipv4.txt
-	#ip6tables-save > backup-rules-ipv6.txt
-	#systemctl stop firewalld ufw 2>/dev/null 
-	#systemctl disable firewalld ufw 2>/dev/null
+	mkdir -p /usr/share/ipban/ && chmod a+rwx /usr/share/ipban/
+	iptables-save  > /usr/share/ipban/backup-rules-ipv4.txt
+	ip6tables-save > /usr/share/ipban/backup-rules-ipv6.txt
+	systemctl stop firewalld ufw 2>/dev/null 
+	systemctl disable firewalld ufw 2>/dev/null
 	crontab -l | grep -v "ipban\|iptables" | crontab -
 	rm -rf /usr/share/xt_geoip/ && mkdir -p /usr/share/xt_geoip/ && chmod a+rwx /usr/share/xt_geoip/
 	chmod +x -f /usr/lib/xtables-addons/xt_geoip_build
