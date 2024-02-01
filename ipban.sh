@@ -1,5 +1,5 @@
 #!/bin/bash
-# v5.1.0 github.com/AliDbg/IPBAN ######### Ubuntu≥20 Debian≥11 CentOS≥8
+# v5.1.1 github.com/AliDbg/IPBAN ######### Ubuntu≥20 Debian≥11 CentOS≥8
 #bash ./ipban.sh -add OUTPUT -geoip CN,IR -limit DROP -icmp no
 #bash ./ipban.sh -reset yes
 #bash ./ipban.sh -remove yes
@@ -117,7 +117,6 @@ EOF
 }
 
 create_update_sh(){
-mkdir -p /usr/share/ipban/ && chmod a+rwx /usr/share/ipban/
 cat > "/usr/share/ipban/ipban-update.sh" << EOF
 #!/bin/bash
 	/usr/share/ipban/download-build-dbip.sh
