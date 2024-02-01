@@ -22,7 +22,7 @@ bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -remove y
 ```
 
 ## 
-#### Arguments
+#### Install Arguments
 >
 > **-add** **INPUT** or **OUTPUT** or **FORWARD**
 >
@@ -32,7 +32,7 @@ bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -remove y
 >
 > **-icmp no/yes** (Deny ping your server)
 
-#### useful command
+#### Useful commands
 > iptables -F && ip6tables -F ## Reset iptables rules
 > 
 > systemctl enable firewalld ufw ## Enable firewall
