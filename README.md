@@ -9,7 +9,7 @@
 - Automatic IP update every day
 - Support Ubuntu≥20 Debian≥11 CentOS≥8
 ## 
-⚠️ Disable the firewall and install on a clean Linux
+:warning: Disable the firewall and install on a clean Linux
 
 **Install [Add rules]**
 ```
