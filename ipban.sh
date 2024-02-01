@@ -127,7 +127,7 @@ cat > "/usr/share/ipban/ipban-update.sh" << EOF
 	\$( sysctl -p > /dev/null 2>&1; init 1; init 3 )
 	echo
 EOF
-chmod +x "/usr/share/ipban/ipban-update.sh"
+	chmod +x "/usr/share/ipban/ipban-update.sh"
 }
 
 iptables_rules(){
