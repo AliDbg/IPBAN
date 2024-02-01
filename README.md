@@ -44,7 +44,7 @@ bash <(wget -qO- raw.githubusercontent.com/AliDbg/IPBAN/main/ipban.sh) -remove y
 >
 > ping x.x.x.x # Ping ip and domain
 
-#### Tools
+#### Useful tools
 > SSH Client: https://github.com/nirui/sshwifty
 >
 > Checker: https://check-host.net
